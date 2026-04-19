@@ -1,11 +1,13 @@
 import { Link, useLocation } from "@tanstack/react-router";
 
-const items = [
+type TabItem = { to: string; label: string; icon: string; primary?: boolean };
+
+const items: TabItem[] = [
   { to: "/feed", label: "Inicio", icon: "🏠" },
   { to: "/publish", label: "Publicar", icon: "➕", primary: true },
   { to: "/my-tasks", label: "Mis tareas", icon: "📋" },
   { to: "/profile", label: "Perfil", icon: "👤" },
-] as const;
+];
 
 export function BottomTabs() {
   const location = useLocation();
