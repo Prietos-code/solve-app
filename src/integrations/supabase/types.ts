@@ -14,16 +14,223 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          phone: string | null
+          rating: number
+          rating_count: number
+          stripe_account_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id: string
+          name: string
+          phone?: string | null
+          rating?: number
+          rating_count?: number
+          stripe_account_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          rating?: number
+          rating_count?: number
+          stripe_account_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ratings: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rated_id: string
+          rater_id: string
+          score: number
+          task_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rated_id: string
+          rater_id: string
+          score: number
+          task_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rated_id?: string
+          rater_id?: string
+          score?: number
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_rated_id_fkey"
+            columns: ["rated_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_rater_id_fkey"
+            columns: ["rater_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          accepted_at: string | null
+          address: string | null
+          category: Database["public"]["Enums"]["task_category"]
+          collaborator_id: string | null
+          completed_at: string | null
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          latitude: number
+          longitude: number
+          payment_intent_id: string | null
+          price: number
+          publisher_id: string
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          address?: string | null
+          category: Database["public"]["Enums"]["task_category"]
+          collaborator_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          image_url?: string | null
+          latitude: number
+          longitude: number
+          payment_intent_id?: string | null
+          price: number
+          publisher_id: string
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+        }
+        Update: {
+          accepted_at?: string | null
+          address?: string | null
+          category?: Database["public"]["Enums"]["task_category"]
+          collaborator_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          latitude?: number
+          longitude?: number
+          payment_intent_id?: string | null
+          price?: number
+          publisher_id?: string
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_collaborator_id_fkey"
+            columns: ["collaborator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_publisher_id_fkey"
+            columns: ["publisher_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      tasks_nearby: {
+        Args: {
+          filter_category?: Database["public"]["Enums"]["task_category"]
+          max_price?: number
+          min_price?: number
+          page_offset?: number
+          page_size?: number
+          radius_km?: number
+          user_lat: number
+          user_lng: number
+        }
+        Returns: {
+          address: string
+          category: Database["public"]["Enums"]["task_category"]
+          created_at: string
+          description: string
+          distance_km: number
+          id: string
+          image_url: string
+          latitude: number
+          longitude: number
+          price: number
+          publisher_avatar: string
+          publisher_id: string
+          publisher_name: string
+          publisher_rating: number
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      task_category:
+        | "RECADOS"
+        | "MASCOTAS"
+        | "MUDANZAS"
+        | "CLASES"
+        | "HOGAR"
+        | "OTROS"
+      task_status:
+        | "OPEN"
+        | "ACCEPTED"
+        | "IN_PROGRESS"
+        | "COMPLETED"
+        | "CANCELLED"
+        | "DISPUTED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +357,23 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      task_category: [
+        "RECADOS",
+        "MASCOTAS",
+        "MUDANZAS",
+        "CLASES",
+        "HOGAR",
+        "OTROS",
+      ],
+      task_status: [
+        "OPEN",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "CANCELLED",
+        "DISPUTED",
+      ],
+    },
   },
 } as const
