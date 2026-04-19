@@ -26,7 +26,7 @@ function FeedPage() {
         user_lat: coords.lat,
         user_lng: coords.lng,
         radius_km: 50,
-        filter_category: category,
+        filter_category: category ?? undefined,
         page_size: 30,
         page_offset: 0,
       })
