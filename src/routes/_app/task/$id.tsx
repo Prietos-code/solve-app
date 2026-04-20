@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { CategoryBadge } from "@/components/CategoryBadge";
@@ -67,7 +68,9 @@ function TaskDetailPage() {
     return (
       <div className="p-6">
         <p className="text-sm text-destructive">{error}</p>
-        <Link to="/feed" className="mt-4 inline-block text-sm text-primary">← Volver</Link>
+        <Link to="/feed" className="mt-4 inline-flex items-center gap-1 text-sm text-primary">
+          <ArrowLeft size={14} /> Volver
+        </Link>
       </div>
     );
   }
@@ -115,25 +118,40 @@ function TaskDetailPage() {
 
   return (
     <div className="pb-10">
-      {task.image_url ? (
-        <div className="aspect-[16/10] w-full bg-muted">
-          <img src={task.image_url} alt={task.title} className="h-full w-full object-cover" />
-        </div>
-      ) : (
-        <div className="flex aspect-[16/10] w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5 text-6xl">
-          📋
-        </div>
-      )}
+      <div className="relative">
+        {task.image_url ? (
+          <div className="aspect-[16/10] w-full bg-muted">
+            <img src={task.image_url} alt={task.title} className="h-full w-full object-cover" />
+          </div>
+        ) : (
+          <div
+            className="flex aspect-[16/10] w-full items-center justify-center text-primary-foreground/80"
+            style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+          >
+            <ImageIcon size={56} strokeWidth={1.4} />
+          </div>
+        )}
+        <button
+          onClick={() => navigate({ to: "/feed" })}
+          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-card/85 text-foreground shadow-card backdrop-blur"
+          aria-label="Volver"
+        >
+          <ArrowLeft size={18} />
+        </button>
+      </div>
 
       <div className="px-5 pt-5">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <CategoryBadge category={task.category} size="md" />
           <StatusBadge status={task.status} />
         </div>
 
         <h1 className="mt-3 text-2xl">{task.title}</h1>
 
-        <div className="mt-3 inline-flex items-center rounded-xl bg-primary/10 px-4 py-2 text-xl font-bold text-primary">
+        <div
+          className="mt-3 inline-flex items-center rounded-xl px-4 py-2 text-xl font-bold text-primary-foreground shadow-elevated"
+          style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+        >
           {formatPrice(task.price)}
         </div>
 
@@ -143,15 +161,20 @@ function TaskDetailPage() {
 
         <Link
           to="/profile"
-          className="mt-6 flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card"
+          className="mt-6 flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
         >
           <UserAvatar name={task.publisher.name} url={task.publisher.avatar_url} size={44} />
           <div className="min-w-0 flex-1">
-            <div className="text-xs text-muted-foreground">Publicado por</div>
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              Publicado por
+            </div>
             <div className="font-semibold">{task.publisher.name}</div>
             <StarRating rating={task.publisher.rating} count={task.publisher.rating_count} />
           </div>
-          <div className="text-xs text-muted-foreground">{timeAgo(task.created_at)}</div>
+          <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock size={12} />
+            {timeAgo(task.created_at)}
+          </div>
         </Link>
 
         <div className="mt-5 overflow-hidden rounded-2xl shadow-card">
@@ -161,7 +184,12 @@ function TaskDetailPage() {
             className="h-44 w-full border-0"
             loading="lazy"
           />
-          {task.address && <div className="bg-card px-4 py-2 text-xs text-muted-foreground">📍 {task.address}</div>}
+          {task.address && (
+            <div className="flex items-center gap-1.5 bg-card px-4 py-2.5 text-xs text-muted-foreground">
+              <MapPin size={13} className="text-primary" />
+              {task.address}
+            </div>
+          )}
         </div>
 
         {error && <div className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
@@ -171,7 +199,8 @@ function TaskDetailPage() {
             <button
               onClick={onAccept}
               disabled={acting}
-              className="w-full rounded-xl bg-primary px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated disabled:opacity-50"
+              className="w-full rounded-xl px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
             >
               {acting ? "Aceptando..." : `Aceptar tarea por ${formatPrice(task.price)}`}
             </button>
@@ -216,8 +245,9 @@ function TaskDetailPage() {
             )}
 
           {task.status === "COMPLETED" && (
-            <div className="rounded-xl bg-success/10 p-4 text-center text-sm font-semibold text-success">
-              ✅ Tarea completada
+            <div className="flex items-center justify-center gap-2 rounded-xl bg-success/10 p-4 text-sm font-semibold text-success">
+              <CheckCircle2 size={18} />
+              Tarea completada
             </div>
           )}
         </div>
