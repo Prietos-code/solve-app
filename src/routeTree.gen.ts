@@ -18,6 +18,7 @@ import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppMyTasksRouteImport } from './routes/_app/my-tasks'
 import { Route as AppFeedRouteImport } from './routes/_app/feed'
 import { Route as AppTaskIdRouteImport } from './routes/_app/task/$id'
+import { Route as AppChatIdRouteImport } from './routes/_app/chat.$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -63,6 +64,11 @@ const AppTaskIdRoute = AppTaskIdRouteImport.update({
   path: '/task/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppChatIdRoute = AppChatIdRouteImport.update({
+  id: '/chat/$id',
+  path: '/chat/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/my-tasks': typeof AppMyTasksRoute
   '/profile': typeof AppProfileRoute
   '/publish': typeof AppPublishRoute
+  '/chat/$id': typeof AppChatIdRoute
   '/task/$id': typeof AppTaskIdRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/my-tasks': typeof AppMyTasksRoute
   '/profile': typeof AppProfileRoute
   '/publish': typeof AppPublishRoute
+  '/chat/$id': typeof AppChatIdRoute
   '/task/$id': typeof AppTaskIdRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_app/my-tasks': typeof AppMyTasksRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/publish': typeof AppPublishRoute
+  '/_app/chat/$id': typeof AppChatIdRoute
   '/_app/task/$id': typeof AppTaskIdRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/my-tasks'
     | '/profile'
     | '/publish'
+    | '/chat/$id'
     | '/task/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/my-tasks'
     | '/profile'
     | '/publish'
+    | '/chat/$id'
     | '/task/$id'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_app/my-tasks'
     | '/_app/profile'
     | '/_app/publish'
+    | '/_app/chat/$id'
     | '/_app/task/$id'
   fileRoutesById: FileRoutesById
 }
@@ -202,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTaskIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/chat/$id': {
+      id: '/_app/chat/$id'
+      path: '/chat/$id'
+      fullPath: '/chat/$id'
+      preLoaderRoute: typeof AppChatIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -210,6 +229,7 @@ interface AppRouteChildren {
   AppMyTasksRoute: typeof AppMyTasksRoute
   AppProfileRoute: typeof AppProfileRoute
   AppPublishRoute: typeof AppPublishRoute
+  AppChatIdRoute: typeof AppChatIdRoute
   AppTaskIdRoute: typeof AppTaskIdRoute
 }
 
@@ -218,6 +238,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMyTasksRoute: AppMyTasksRoute,
   AppProfileRoute: AppProfileRoute,
   AppPublishRoute: AppPublishRoute,
+  AppChatIdRoute: AppChatIdRoute,
   AppTaskIdRoute: AppTaskIdRoute,
 }
 
