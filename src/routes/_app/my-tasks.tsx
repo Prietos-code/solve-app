@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Inbox, Image as ImageIcon, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { TaskCard, type TaskCardData } from "@/components/TaskCard";
+import { type TaskCardData } from "@/components/TaskCard";
 import { StatusBadge } from "@/components/StatusBadge";
 import type { TaskStatus } from "@/lib/categories";
 import { Link } from "@tanstack/react-router";
@@ -67,7 +68,8 @@ function MyTasksPage() {
 
   return (
     <div className="px-5 pb-8 pt-6">
-      <h1 className="text-2xl">Mis tareas</h1>
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Tu actividad</p>
+      <h1 className="mt-0.5 text-[28px] leading-tight">Mis tareas</h1>
 
       <div className="mt-5 grid grid-cols-2 rounded-xl bg-card p-1 shadow-card">
         <TabBtn active={tab === "published"} onClick={() => setTab("published")}>
@@ -82,12 +84,19 @@ function MyTasksPage() {
         {loading && <p className="text-sm text-muted-foreground">Cargando...</p>}
         {!loading && rows.length === 0 && (
           <div className="mt-12 text-center">
-            <div className="text-4xl">📭</div>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+              <Inbox size={28} />
+            </div>
+            <p className="text-sm text-muted-foreground">
               {tab === "published" ? "Aún no has publicado tareas." : "Aún no has aceptado ninguna tarea."}
             </p>
             {tab === "published" && (
-              <Link to="/publish" className="mt-4 inline-block rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
+              <Link
+                to="/publish"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elevated"
+                style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+              >
+                <Plus size={16} strokeWidth={2.5} />
                 Publicar primera tarea
               </Link>
             )}
@@ -99,17 +108,17 @@ function MyTasksPage() {
               key={t.id}
               to="/task/$id"
               params={{ id: t.id }}
-              className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card"
+              className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
             >
               {t.image_url ? (
                 <img src={t.image_url} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
               ) : (
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-2xl">
-                  📌
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+                  <ImageIcon size={22} />
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
                   <CategoryBadge category={t.category} />
                   <StatusBadge status={t.status} />
                 </div>
@@ -131,7 +140,7 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
     <button
       onClick={onClick}
       className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-        active ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+        active ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
       }`}
     >
       {children}

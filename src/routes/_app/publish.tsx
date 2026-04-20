@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
+import { Camera, X, ImagePlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { useAuth } from "@/hooks/useAuth";
@@ -91,7 +92,8 @@ function PublishPage() {
 
   return (
     <div className="px-5 pb-8 pt-6">
-      <h1 className="text-2xl">Publicar tarea</h1>
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Nueva tarea</p>
+      <h1 className="mt-0.5 text-[28px] leading-tight">Publicar tarea</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Describe lo que necesitas y ponle un precio justo.
       </p>
@@ -104,7 +106,7 @@ function PublishPage() {
             maxLength={60}
             required
             placeholder="Ej. Pasear a mi perro 30 min"
-            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none focus:border-primary"
+            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
           />
         </Field>
 
@@ -116,7 +118,7 @@ function PublishPage() {
             required
             rows={4}
             placeholder="Da más detalles para que un colaborador entienda la tarea"
-            className="w-full resize-none rounded-xl border border-input bg-card px-4 py-3 text-base outline-none focus:border-primary"
+            className="w-full resize-none rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
           />
         </Field>
 
@@ -124,17 +126,20 @@ function PublishPage() {
           <div className="grid grid-cols-3 gap-2">
             {CATEGORIES.map((c) => {
               const active = category === c.value;
+              const Icon = c.icon;
               return (
                 <button
                   key={c.value}
                   type="button"
                   onClick={() => setCategory(c.value)}
-                  className={`flex flex-col items-center gap-1 rounded-xl border-2 px-2 py-3 text-xs font-semibold transition-all ${
-                    active ? "border-transparent text-white" : "border-border bg-card text-foreground"
+                  className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-2 py-3.5 text-xs font-semibold transition-all ${
+                    active
+                      ? "border-transparent text-white shadow-sm"
+                      : "border-border bg-card text-foreground hover:border-primary/40"
                   }`}
                   style={active ? { backgroundColor: c.colorVar } : undefined}
                 >
-                  <span className="text-xl">{c.emoji}</span>
+                  <Icon size={20} strokeWidth={2.2} />
                   {c.label}
                 </button>
               );
@@ -150,7 +155,7 @@ function PublishPage() {
               required
               inputMode="decimal"
               placeholder="15"
-              className="w-full rounded-xl border border-input bg-card px-4 py-3 pr-10 text-base outline-none focus:border-primary"
+              className="w-full rounded-xl border border-input bg-card px-4 py-3 pr-10 text-base outline-none transition-colors focus:border-primary"
             />
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
           </div>
@@ -162,7 +167,7 @@ function PublishPage() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Ej. Calle Mayor, Madrid"
-            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none focus:border-primary"
+            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
           />
           <p className="mt-1 text-[11px] text-muted-foreground">
             Coordenadas detectadas: {coords.lat.toFixed(3)}, {coords.lng.toFixed(3)}
@@ -179,15 +184,15 @@ function PublishPage() {
                   setImageFile(null);
                   setImagePreview(null);
                 }}
-                className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white"
+                className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-xs font-semibold text-white backdrop-blur"
               >
-                Quitar
+                <X size={12} /> Quitar
               </button>
             </div>
           ) : (
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card px-4 py-8 text-sm text-muted-foreground">
-              <span className="text-2xl">📷</span>
-              <span className="mt-1">Toca para añadir foto</span>
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card px-4 py-8 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
+              <ImagePlus size={28} strokeWidth={1.8} />
+              <span className="mt-2 font-medium">Toca para añadir foto</span>
               <input type="file" accept="image/*" onChange={onPickImage} className="hidden" />
             </label>
           )}
@@ -198,7 +203,8 @@ function PublishPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-primary px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated disabled:opacity-50"
+          className="w-full rounded-xl px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
+          style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
         >
           {loading ? "Publicando..." : "Publicar tarea"}
         </button>
@@ -211,7 +217,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <label className="text-xs font-semibold text-muted-foreground">{label}</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</label>
         {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
       </div>
       {children}

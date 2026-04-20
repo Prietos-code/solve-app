@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { MapPin, Clock } from "lucide-react";
 import { CategoryBadge } from "./CategoryBadge";
 import { UserAvatar } from "./UserAvatar";
 import { formatDistance, formatPrice, timeAgo } from "@/lib/format";
@@ -45,12 +46,15 @@ export function TaskCard({ task }: { task: TaskCardData }) {
           </div>
           <div className="flex shrink-0 items-center gap-2 text-[11px] text-muted-foreground">
             {task.distance_km != null && (
-              <>
-                <span>{formatDistance(task.distance_km)}</span>
-                <span>·</span>
-              </>
+              <span className="inline-flex items-center gap-0.5">
+                <MapPin size={11} />
+                {formatDistance(task.distance_km)}
+              </span>
             )}
-            <span>{timeAgo(task.created_at)}</span>
+            <span className="inline-flex items-center gap-0.5">
+              <Clock size={11} />
+              {timeAgo(task.created_at)}
+            </span>
           </div>
         </div>
       </div>
