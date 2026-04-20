@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender_id: string
+          task_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender_id: string
+          task_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -185,6 +224,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      is_task_participant: {
+        Args: { _task_id: string; _user_id: string }
+        Returns: boolean
+      }
       tasks_nearby: {
         Args: {
           filter_category?: Database["public"]["Enums"]["task_category"]

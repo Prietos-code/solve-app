@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Inbox, Image as ImageIcon, Plus } from "lucide-react";
+import { Inbox, Image as ImageIcon, Plus, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { type TaskCardData } from "@/components/TaskCard";
@@ -103,33 +103,47 @@ function MyTasksPage() {
           </div>
         )}
         {!loading &&
-          rows.map((t) => (
-            <Link
-              key={t.id}
-              to="/task/$id"
-              params={{ id: t.id }}
-              className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
-            >
-              {t.image_url ? (
-                <img src={t.image_url} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
-              ) : (
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                  <ImageIcon size={22} />
-                </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <CategoryBadge category={t.category} />
-                  <StatusBadge status={t.status} />
-                </div>
-                <h3 className="mt-1 line-clamp-1 text-sm font-semibold">{t.title}</h3>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span>{timeAgo(t.created_at)}</span>
-                  <span className="font-bold text-primary">{formatPrice(t.price)}</span>
-                </div>
+          rows.map((t) => {
+            const chatActive = t.status === "ACCEPTED" || t.status === "IN_PROGRESS";
+            return (
+              <div
+                key={t.id}
+                className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
+              >
+                <Link to="/task/$id" params={{ id: t.id }} className="flex min-w-0 flex-1 items-center gap-3">
+                  {t.image_url ? (
+                    <img src={t.image_url} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+                  ) : (
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+                      <ImageIcon size={22} />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <CategoryBadge category={t.category} />
+                      <StatusBadge status={t.status} />
+                    </div>
+                    <h3 className="mt-1 line-clamp-1 text-sm font-semibold">{t.title}</h3>
+                    <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                      <span>{timeAgo(t.created_at)}</span>
+                      <span className="font-bold text-primary">{formatPrice(t.price)}</span>
+                    </div>
+                  </div>
+                </Link>
+                {chatActive && (
+                  <Link
+                    to="/chat/$id"
+                    params={{ id: t.id }}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary-foreground shadow-elevated"
+                    style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+                    aria-label="Abrir chat"
+                  >
+                    <MessageCircle size={18} />
+                  </Link>
+                )}
               </div>
-            </Link>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

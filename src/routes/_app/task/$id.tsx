@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { CategoryBadge } from "@/components/CategoryBadge";
@@ -195,6 +195,18 @@ function TaskDetailPage() {
         {error && <div className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
 
         <div className="mt-6 space-y-2">
+          {(isPublisher || isCollaborator) &&
+            (task.status === "ACCEPTED" || task.status === "IN_PROGRESS") && (
+              <Link
+                to="/chat/$id"
+                params={{ id: task.id }}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-card px-4 py-3.5 text-base font-semibold text-primary shadow-card transition-transform active:scale-[0.99]"
+              >
+                <MessageCircle size={18} />
+                Abrir chat
+              </Link>
+            )}
+
           {!isPublisher && isOpen && (
             <button
               onClick={onAccept}
