@@ -1,3 +1,5 @@
+import { Star } from "lucide-react";
+
 interface Props {
   rating: number;
   count?: number;
@@ -8,11 +10,18 @@ interface Props {
 export function StarRating({ rating, count, size = "sm", showCount = true }: Props) {
   const filled = Math.round(rating);
   const sz = size === "sm" ? "text-xs" : "text-sm";
+  const iconSz = size === "sm" ? 12 : 15;
   return (
     <span className={`inline-flex items-center gap-1 ${sz}`}>
-      <span className="text-warning">
-        {"★".repeat(filled)}
-        <span className="text-muted-foreground/40">{"★".repeat(5 - filled)}</span>
+      <span className="inline-flex items-center gap-0.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            size={iconSz}
+            strokeWidth={2}
+            className={i < filled ? "fill-warning text-warning" : "text-muted-foreground/30"}
+          />
+        ))}
       </span>
       {showCount && (
         <span className="text-muted-foreground">

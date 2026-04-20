@@ -1,18 +1,19 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { Home, Plus, ClipboardList, User, type LucideIcon } from "lucide-react";
 
-type TabItem = { to: string; label: string; icon: string; primary?: boolean };
+type TabItem = { to: string; label: string; Icon: LucideIcon; primary?: boolean };
 
 const items: TabItem[] = [
-  { to: "/feed", label: "Inicio", icon: "🏠" },
-  { to: "/publish", label: "Publicar", icon: "➕", primary: true },
-  { to: "/my-tasks", label: "Mis tareas", icon: "📋" },
-  { to: "/profile", label: "Perfil", icon: "👤" },
+  { to: "/feed", label: "Inicio", Icon: Home },
+  { to: "/publish", label: "Publicar", Icon: Plus, primary: true },
+  { to: "/my-tasks", label: "Mis tareas", Icon: ClipboardList },
+  { to: "/profile", label: "Perfil", Icon: User },
 ];
 
 export function BottomTabs() {
   const location = useLocation();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur safe-bottom">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-card/85 backdrop-blur-xl safe-bottom">
       <div className="mx-auto flex max-w-xl items-stretch justify-around px-2 pt-1.5">
         {items.map((it) => {
           const active = location.pathname.startsWith(it.to);
@@ -21,13 +22,16 @@ export function BottomTabs() {
               <Link
                 key={it.to}
                 to={it.to}
-                className="-mt-5 flex flex-col items-center"
+                className="-mt-6 flex flex-col items-center"
                 aria-label={it.label}
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl text-primary-foreground shadow-elevated">
-                  {it.icon}
+                <span
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl text-primary-foreground shadow-elevated transition-transform active:scale-95"
+                  style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+                >
+                  <it.Icon size={26} strokeWidth={2.5} />
                 </span>
-                <span className="mt-0.5 text-[10px] font-medium text-muted-foreground">{it.label}</span>
+                <span className="mt-1 text-[10px] font-semibold text-muted-foreground">{it.label}</span>
               </Link>
             );
           }
@@ -35,12 +39,12 @@ export function BottomTabs() {
             <Link
               key={it.to}
               to={it.to}
-              className={`flex min-w-[64px] flex-col items-center gap-0.5 px-2 py-1.5 text-[11px] font-medium transition-colors ${
-                active ? "text-primary" : "text-muted-foreground"
+              className={`flex min-w-[64px] flex-col items-center gap-0.5 px-2 py-2 text-[11px] font-medium transition-colors ${
+                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <span className="text-lg leading-none">{it.icon}</span>
-              <span>{it.label}</span>
+              <it.Icon size={22} strokeWidth={active ? 2.5 : 2} />
+              <span className="font-semibold">{it.label}</span>
             </Link>
           );
         })}

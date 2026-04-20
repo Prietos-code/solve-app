@@ -1,17 +1,27 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  ShoppingBag,
+  PawPrint,
+  Truck,
+  GraduationCap,
+  Wrench,
+  Sparkles,
+} from "lucide-react";
+
 export type Category = "RECADOS" | "MASCOTAS" | "MUDANZAS" | "CLASES" | "HOGAR" | "OTROS";
 
 export const CATEGORIES: {
   value: Category;
   label: string;
-  emoji: string;
+  icon: LucideIcon;
   colorVar: string;
 }[] = [
-  { value: "RECADOS", label: "Recados", emoji: "🛍️", colorVar: "var(--cat-recados)" },
-  { value: "MASCOTAS", label: "Mascotas", emoji: "🐶", colorVar: "var(--cat-mascotas)" },
-  { value: "MUDANZAS", label: "Mudanzas", emoji: "📦", colorVar: "var(--cat-mudanzas)" },
-  { value: "CLASES", label: "Clases", emoji: "📚", colorVar: "var(--cat-clases)" },
-  { value: "HOGAR", label: "Hogar", emoji: "🔧", colorVar: "var(--cat-hogar)" },
-  { value: "OTROS", label: "Otros", emoji: "✨", colorVar: "var(--cat-otros)" },
+  { value: "RECADOS", label: "Recados", icon: ShoppingBag, colorVar: "var(--cat-recados)" },
+  { value: "MASCOTAS", label: "Mascotas", icon: PawPrint, colorVar: "var(--cat-mascotas)" },
+  { value: "MUDANZAS", label: "Mudanzas", icon: Truck, colorVar: "var(--cat-mudanzas)" },
+  { value: "CLASES", label: "Clases", icon: GraduationCap, colorVar: "var(--cat-clases)" },
+  { value: "HOGAR", label: "Hogar", icon: Wrench, colorVar: "var(--cat-hogar)" },
+  { value: "OTROS", label: "Otros", icon: Sparkles, colorVar: "var(--cat-otros)" },
 ];
 
 export const CATEGORY_MAP = Object.fromEntries(
