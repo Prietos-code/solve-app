@@ -66,6 +66,17 @@ function TaskDetailPage() {
 
   useEffect(load, [id]);
 
+  useEffect(() => {
+    if (!user || !task || task.status !== "COMPLETED") return;
+    supabase
+      .from("ratings")
+      .select("id")
+      .eq("task_id", task.id)
+      .eq("rater_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setHasRated(!!data));
+  }, [user, task]);
+
   if (loading) return <div className="p-6 text-sm text-muted-foreground">Cargando...</div>;
   if (error || !task) {
     return (
