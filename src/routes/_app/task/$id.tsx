@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock, MessageCircle, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StarRating } from "@/components/StarRating";
+import { RateTaskDialog } from "@/components/RateTaskDialog";
 import { formatPrice, timeAgo } from "@/lib/format";
 import type { Category, TaskStatus } from "@/lib/categories";
 
