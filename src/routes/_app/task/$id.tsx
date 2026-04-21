@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, ImageIcon, CheckCircle2, Clock, MessageCircle, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StarRating } from "@/components/StarRating";
+import { RateTaskDialog } from "@/components/RateTaskDialog";
 import { formatPrice, timeAgo } from "@/lib/format";
 import type { Category, TaskStatus } from "@/lib/categories";
 
@@ -39,6 +40,8 @@ function TaskDetailPage() {
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasRated, setHasRated] = useState(false);
+  const [rateOpen, setRateOpen] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -62,6 +65,17 @@ function TaskDetailPage() {
   };
 
   useEffect(load, [id]);
+
+  useEffect(() => {
+    if (!user || !task || task.status !== "COMPLETED") return;
+    supabase
+      .from("ratings")
+      .select("id")
+      .eq("task_id", task.id)
+      .eq("rater_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setHasRated(!!data));
+  }, [user, task]);
 
   if (loading) return <div className="p-6 text-sm text-muted-foreground">Cargando...</div>;
   if (error || !task) {
@@ -262,8 +276,37 @@ function TaskDetailPage() {
               Tarea completada
             </div>
           )}
+
+          {task.status === "COMPLETED" && (isPublisher || isCollaborator) && (
+            hasRated ? (
+              <div className="flex items-center justify-center gap-2 rounded-xl bg-card p-3 text-xs text-muted-foreground shadow-card">
+                <Star size={14} className="fill-warning text-warning" />
+                Ya has valorado esta tarea
+              </div>
+            ) : (
+              <button
+                onClick={() => setRateOpen(true)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-warning px-4 py-3.5 text-base font-semibold text-warning-foreground shadow-elevated transition-transform active:scale-[0.99]"
+              >
+                <Star size={18} />
+                Valorar a {isPublisher ? "colaborador" : task.publisher.name.split(" ")[0]}
+              </button>
+            )
+          )}
         </div>
       </div>
+
+      {user && task.status === "COMPLETED" && (isPublisher || isCollaborator) && (
+        <RateTaskDialog
+          open={rateOpen}
+          onClose={() => setRateOpen(false)}
+          taskId={task.id}
+          raterId={user.id}
+          ratedId={isPublisher ? task.collaborator_id! : task.publisher_id}
+          ratedName={isPublisher ? "colaborador" : task.publisher.name}
+          onRated={() => setHasRated(true)}
+        />
+      )}
     </div>
   );
 }

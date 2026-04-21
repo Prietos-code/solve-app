@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StarRating } from "@/components/StarRating";
+import { ReviewsList } from "@/components/ReviewsList";
 import { formatPrice } from "@/lib/format";
 
 export const Route = createFileRoute("/_app/profile")({
@@ -188,6 +189,13 @@ function ProfilePage() {
             Icon={Wallet}
             tint="var(--primary)"
           />
+        </div>
+
+        <div className="mt-8">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Valoraciones recibidas
+          </h2>
+          <ReviewsList userId={profile.id} />
         </div>
 
         <div className="mt-8 space-y-2">
