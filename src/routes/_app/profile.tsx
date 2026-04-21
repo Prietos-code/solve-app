@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Pencil, CheckCircle2, Wallet, LogOut, CreditCard } from "lucide-react";
+import { Pencil, CheckCircle2, Wallet, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { UserAvatar } from "@/components/UserAvatar";
@@ -198,25 +198,10 @@ function ProfilePage() {
           <ReviewsList userId={profile.id} />
         </div>
 
-        <div className="mt-8 space-y-2">
-          <button
-            disabled
-            className="flex w-full items-center justify-between rounded-xl bg-card p-4 text-sm shadow-card disabled:opacity-60"
-          >
-            <span className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <CreditCard size={18} />
-              </span>
-              <span className="font-semibold">Configurar cuenta de cobros</span>
-            </span>
-            <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
-              Fase 3
-            </span>
-          </button>
-
+        <div className="mt-8">
           <button
             onClick={onLogout}
-            className="flex w-full items-center gap-3 rounded-xl bg-card p-4 text-sm font-semibold text-destructive shadow-card transition-colors hover:bg-destructive/5"
+            className="flex w-full items-center gap-3 rounded-xl border border-border/60 bg-card p-4 text-sm font-semibold text-destructive shadow-card transition-colors hover:bg-destructive/5"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/10">
               <LogOut size={18} />
