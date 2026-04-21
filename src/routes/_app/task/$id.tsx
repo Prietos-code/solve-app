@@ -40,6 +40,8 @@ function TaskDetailPage() {
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasRated, setHasRated] = useState(false);
+  const [rateOpen, setRateOpen] = useState(false);
 
   const load = () => {
     setLoading(true);
