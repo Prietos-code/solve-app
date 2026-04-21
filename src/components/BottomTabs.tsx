@@ -39,10 +39,16 @@ export function BottomTabs() {
             <Link
               key={it.to}
               to={it.to}
-              className={`flex min-w-[64px] flex-col items-center gap-0.5 px-2 py-2 text-[11px] font-medium transition-colors ${
+              className={`relative flex min-w-[64px] flex-col items-center gap-0.5 px-2 pb-2 pt-2.5 text-[11px] font-medium transition-colors ${
                 active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              {active && (
+                <span
+                  aria-hidden
+                  className="absolute top-0 h-0.5 w-8 rounded-full bg-primary"
+                />
+              )}
               <it.Icon size={22} strokeWidth={active ? 2.5 : 2} />
               <span className="font-semibold">{it.label}</span>
             </Link>

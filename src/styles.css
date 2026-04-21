@@ -43,10 +43,12 @@
   --color-cat-hogar: var(--cat-hogar);
   --color-cat-otros: var(--cat-otros);
 
-  --shadow-card: 0 4px 12px -2px oklch(0 0 0 / 0.06), 0 2px 4px -1px oklch(0 0 0 / 0.04);
-  --shadow-elevated: 0 10px 30px -10px oklch(0.30 0.15 260 / 0.18);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04), 0 4px 16px -4px oklch(0.30 0.10 260 / 0.08);
+  --shadow-elevated: 0 12px 32px -12px oklch(0.30 0.15 260 / 0.25), 0 4px 12px -4px oklch(0.30 0.15 260 / 0.10);
+  --shadow-sharp: 0 1px 0 oklch(0 0 0 / 0.04), 0 1px 3px oklch(0 0 0 / 0.06);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 :root {
@@ -140,8 +142,10 @@
   h1, h2, h3, h4 {
     color: var(--color-primary-dark);
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.022em;
+    font-feature-settings: "ss01", "cv11";
   }
+  h1 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; }
 }
 
 @layer utilities {
@@ -153,4 +157,14 @@
   }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
+  .text-balance { text-wrap: balance; }
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
