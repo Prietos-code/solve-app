@@ -5,13 +5,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { TaskCard, type TaskCardData } from "@/components/TaskCard";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { useLocation } from "@/hooks/useLocation";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/_app/feed")({
   component: FeedPage,
 });
 
 function FeedPage() {
+  const { user } = useAuth();
   const { coords, loading: geoLoading, isFallback } = useLocation();
+  const firstName =
+    (user?.user_metadata?.name as string | undefined)?.split(" ")[0] ??
+    user?.email?.split("@")[0] ??
+    "";
   const [category, setCategory] = useState<Category | null>(null);
   const [search, setSearch] = useState("");
   const [tasks, setTasks] = useState<TaskCardData[]>([]);
@@ -67,20 +73,18 @@ function FeedPage() {
 
   return (
     <div>
-      <header className="sticky top-0 z-30 bg-background/85 backdrop-blur-xl safe-top">
-        <div className="px-5 pb-3 pt-5">
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Tareas cerca
-              </p>
-              <h1 className="mt-0.5 text-[28px] leading-tight">Descubre y ayuda</h1>
-            </div>
-          </div>
+      <header className="sticky top-0 z-30 border-b border-border/40 bg-background/85 backdrop-blur-xl safe-top">
+        <div className="px-5 pb-3 pt-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            {firstName ? `Hola, ${firstName}` : "Bienvenido"}
+          </p>
+          <h1 className="mt-1 text-[28px] leading-[1.1] tracking-tight">
+            Tareas <span className="gradient-text">cerca de ti</span>
+          </h1>
           {isFallback && (
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-warning/15 px-2.5 py-1 text-[11px] font-medium text-warning-foreground">
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-warning/30 bg-warning/10 px-2.5 py-1 text-[11px] font-medium text-warning-foreground">
               <MapPin size={12} />
-              Madrid centro · activa ubicación para tu zona
+              Madrid centro · activa la ubicación para tu zona
             </div>
           )}
           <div className="relative mt-4">
@@ -89,7 +93,7 @@ function FeedPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Busca paseos, recados, mudanzas..."
-              className="w-full rounded-2xl border border-input bg-card py-3 pl-11 pr-4 text-sm shadow-card outline-none transition-colors focus:border-primary"
+              className="w-full rounded-2xl border border-input bg-card py-3 pl-11 pr-4 text-sm shadow-sharp outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
             />
           </div>
         </div>
