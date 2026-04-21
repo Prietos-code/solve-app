@@ -276,8 +276,37 @@ function TaskDetailPage() {
               Tarea completada
             </div>
           )}
+
+          {task.status === "COMPLETED" && (isPublisher || isCollaborator) && (
+            hasRated ? (
+              <div className="flex items-center justify-center gap-2 rounded-xl bg-card p-3 text-xs text-muted-foreground shadow-card">
+                <Star size={14} className="fill-warning text-warning" />
+                Ya has valorado esta tarea
+              </div>
+            ) : (
+              <button
+                onClick={() => setRateOpen(true)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-warning px-4 py-3.5 text-base font-semibold text-warning-foreground shadow-elevated transition-transform active:scale-[0.99]"
+              >
+                <Star size={18} />
+                Valorar a {isPublisher ? "colaborador" : task.publisher.name.split(" ")[0]}
+              </button>
+            )
+          )}
         </div>
       </div>
+
+      {user && task.status === "COMPLETED" && (isPublisher || isCollaborator) && (
+        <RateTaskDialog
+          open={rateOpen}
+          onClose={() => setRateOpen(false)}
+          taskId={task.id}
+          raterId={user.id}
+          ratedId={isPublisher ? task.collaborator_id! : task.publisher_id}
+          ratedName={isPublisher ? "colaborador" : task.publisher.name}
+          onRated={() => setHasRated(true)}
+        />
+      )}
     </div>
   );
 }
