@@ -3,7 +3,7 @@ import { MapPin, Clock } from "lucide-react";
 import { CategoryBadge } from "./CategoryBadge";
 import { UserAvatar } from "./UserAvatar";
 import { formatDistance, formatPrice, timeAgo } from "@/lib/format";
-import { CATEGORY_MAP, type Category } from "@/lib/categories";
+import { type Category } from "@/lib/categories";
 
 export interface TaskCardData {
   id: string;
@@ -18,60 +18,56 @@ export interface TaskCardData {
 }
 
 export function TaskCard({ task }: { task: TaskCardData }) {
-  const accent = CATEGORY_MAP[task.category]?.colorVar ?? "var(--primary)";
   return (
     <Link
       to="/task/$id"
       params={{ id: task.id }}
-      className="group relative block overflow-hidden rounded-2xl border border-border/60 bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-elevated active:scale-[0.985]"
+      className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-oak-soft/40 hover:shadow-elevated active:scale-[0.99]"
     >
-      {/* Accent bar by category */}
-      <span
-        aria-hidden
-        className="absolute inset-y-0 left-0 w-1"
-        style={{ backgroundColor: accent }}
-      />
       {task.image_url && (
-        <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
+        <div className="aspect-[16/9] w-full overflow-hidden bg-paper-warm">
           <img
             src={task.image_url}
             alt={task.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
         </div>
       )}
-      <div className="p-4 pl-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <CategoryBadge category={task.category} />
-            <h3 className="mt-2 line-clamp-2 text-[15.5px] font-semibold leading-snug tracking-tight text-foreground">
-              {task.title}
-            </h3>
-          </div>
-          <div className="shrink-0 rounded-xl bg-primary/10 px-3 py-1.5 text-sm font-bold tracking-tight text-primary ring-1 ring-inset ring-primary/15">
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <CategoryBadge category={task.category} />
+          <span className="font-serif text-2xl font-semibold tabular-nums leading-none text-primary">
             {formatPrice(task.price)}
-          </div>
+          </span>
         </div>
-        <div className="mt-3.5 flex items-center justify-between border-t border-border/50 pt-3">
-          <div className="flex min-w-0 items-center gap-2">
-            <UserAvatar name={task.publisher_name} url={task.publisher_avatar} size={26} />
-            <span className="truncate text-xs font-medium text-foreground/80">
-              {task.publisher_name}
-            </span>
-          </div>
-          <div className="flex shrink-0 items-center gap-2.5 text-[11px] font-medium text-muted-foreground">
-            {task.distance_km != null && (
+        <h3 className="font-serif text-xl leading-snug text-primary line-clamp-2 transition-colors group-hover:text-oak-soft">
+          {task.title}
+        </h3>
+        <div className="mt-4 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.14em] text-oak-soft">
+          {task.distance_km != null && (
+            <>
               <span className="inline-flex items-center gap-1">
                 <MapPin size={11} strokeWidth={2.4} />
                 {formatDistance(task.distance_km)}
               </span>
-            )}
-            <span aria-hidden className="h-0.5 w-0.5 rounded-full bg-muted-foreground/50" />
-            <span className="inline-flex items-center gap-1">
-              <Clock size={11} strokeWidth={2.4} />
-              {timeAgo(task.created_at)}
+              <span aria-hidden className="h-0.5 w-0.5 rounded-full bg-oak-soft/50" />
+            </>
+          )}
+          <span className="inline-flex items-center gap-1">
+            <Clock size={11} strokeWidth={2.4} />
+            {timeAgo(task.created_at)}
+          </span>
+        </div>
+        <div className="mt-4 flex items-center justify-between border-t border-paper-warm pt-4">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <UserAvatar name={task.publisher_name} url={task.publisher_avatar} size={28} />
+            <span className="truncate text-sm font-medium text-primary/85">
+              {task.publisher_name}
             </span>
           </div>
+          <span className="rounded-lg bg-paper-warm px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+            Postular
+          </span>
         </div>
       </div>
     </Link>
