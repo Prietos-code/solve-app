@@ -13,8 +13,8 @@ const items: TabItem[] = [
 export function BottomTabs() {
   const location = useLocation();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-card/85 backdrop-blur-xl safe-bottom">
-      <div className="mx-auto flex max-w-xl items-stretch justify-around px-2 pt-1.5">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl safe-bottom">
+      <div className="mx-auto flex max-w-xl items-stretch justify-around px-3 pt-1.5">
         {items.map((it) => {
           const active = location.pathname.startsWith(it.to);
           if (it.primary) {
@@ -22,16 +22,15 @@ export function BottomTabs() {
               <Link
                 key={it.to}
                 to={it.to}
-                className="-mt-6 flex flex-col items-center"
+                className="-mt-7 flex flex-col items-center"
                 aria-label={it.label}
               >
-                <span
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl text-primary-foreground shadow-elevated transition-transform active:scale-95"
-                  style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
-                >
-                  <it.Icon size={26} strokeWidth={2.5} />
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-elevated transition-transform active:scale-95">
+                  <it.Icon size={26} strokeWidth={2.2} />
                 </span>
-                <span className="mt-1 text-[10px] font-semibold text-muted-foreground">{it.label}</span>
+                <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-oak-soft">
+                  {it.label}
+                </span>
               </Link>
             );
           }
@@ -39,8 +38,8 @@ export function BottomTabs() {
             <Link
               key={it.to}
               to={it.to}
-              className={`relative flex min-w-[64px] flex-col items-center gap-0.5 px-2 pb-2 pt-2.5 text-[11px] font-medium transition-colors ${
-                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              className={`relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors ${
+                active ? "text-primary" : "text-oak-soft hover:text-primary"
               }`}
             >
               {active && (
@@ -49,8 +48,8 @@ export function BottomTabs() {
                   className="absolute top-0 h-0.5 w-8 rounded-full bg-primary"
                 />
               )}
-              <it.Icon size={22} strokeWidth={active ? 2.5 : 2} />
-              <span className="font-semibold">{it.label}</span>
+              <it.Icon size={20} strokeWidth={active ? 2.4 : 2} />
+              <span>{it.label}</span>
             </Link>
           );
         })}

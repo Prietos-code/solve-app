@@ -97,29 +97,29 @@ function ProfilePage() {
     navigate({ to: "/login" });
   };
 
-  if (!profile) return <div className="p-6 text-sm text-muted-foreground">Cargando perfil...</div>;
+  if (!profile) return <div className="p-6 text-sm text-oak-soft">Cargando perfil...</div>;
 
   return (
     <div className="pb-10">
-      {/* Hero gradient header */}
-      <div
-        className="px-5 pb-16 pt-10"
-        style={{
-          background: "linear-gradient(135deg, var(--primary), var(--primary-dark))",
-        }}
-      >
-        <p className="text-center text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/70">
-          Tu perfil
-        </p>
+      {/* Hero header — wood-deep with subtle ornament */}
+      <div className="bg-primary px-5 pb-20 pt-10 text-primary-foreground">
+        <div className="text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary-foreground/60">
+            Tu perfil
+          </p>
+          <div className="ornament-rule mx-auto mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] !text-primary-foreground/50">
+            HelpApp
+          </div>
+        </div>
       </div>
 
-      <div className="-mt-12 px-5">
+      <div className="-mt-14 px-5">
         <div className="flex flex-col items-center text-center">
           <label className="relative cursor-pointer">
             <div className="rounded-full ring-4 ring-background">
-              <UserAvatar name={profile.name} url={profile.avatar_url} size={96} />
+              <UserAvatar name={profile.name} url={profile.avatar_url} size={104} />
             </div>
-            <span className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-elevated">
+            <span className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-elevated ring-2 ring-background">
               <Pencil size={14} strokeWidth={2.5} />
             </span>
             <input type="file" accept="image/*" onChange={onAvatarChange} className="hidden" />
@@ -127,26 +127,30 @@ function ProfilePage() {
 
           {!editing ? (
             <>
-              <h1 className="mt-4 text-2xl">{profile.name}</h1>
-              <p className="text-xs text-muted-foreground">{profile.email}</p>
-              <div className="mt-2">
+              <h1 className="mt-5 font-serif text-3xl font-semibold leading-tight">{profile.name}</h1>
+              <p className="mt-1 text-xs text-oak-soft">{profile.email}</p>
+              <div className="mt-3">
                 <StarRating rating={profile.rating} count={profile.rating_count} size="md" />
               </div>
-              {profile.bio && <p className="mt-3 max-w-xs text-sm text-muted-foreground">{profile.bio}</p>}
+              {profile.bio && (
+                <p className="mt-4 max-w-xs font-serif text-base italic leading-relaxed text-oak-soft">
+                  “{profile.bio}”
+                </p>
+              )}
               <button
                 onClick={() => setEditing(true)}
-                className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-5 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-paper-warm"
               >
-                <Pencil size={14} />
+                <Pencil size={13} />
                 Editar perfil
               </button>
             </>
           ) : (
-            <div className="mt-4 w-full max-w-sm space-y-3">
+            <div className="mt-5 w-full max-w-sm space-y-3">
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none focus:border-primary"
+                className="w-full rounded-xl border border-input bg-paper-warm px-4 py-3 text-base outline-none focus:border-primary focus:bg-card"
                 placeholder="Nombre"
               />
               <textarea
@@ -155,12 +159,12 @@ function ProfilePage() {
                 rows={3}
                 maxLength={200}
                 placeholder="Cuéntanos algo sobre ti..."
-                className="w-full resize-none rounded-xl border border-input bg-card px-4 py-3 text-sm outline-none focus:border-primary"
+                className="w-full resize-none rounded-xl border border-input bg-paper-warm px-4 py-3 text-sm outline-none focus:border-primary focus:bg-card"
               />
               <div className="flex gap-2">
                 <button
                   onClick={() => setEditing(false)}
-                  className="flex-1 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold"
+                  className="flex-1 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold text-oak-soft"
                 >
                   Cancelar
                 </button>
@@ -181,7 +185,7 @@ function ProfilePage() {
             label="Tareas completadas"
             value={String(stats.completed)}
             Icon={CheckCircle2}
-            tint="var(--success)"
+            tint="var(--cat-clases)"
           />
           <StatCard
             label="Ganado"
@@ -191,17 +195,18 @@ function ProfilePage() {
           />
         </div>
 
-        <div className="mt-8">
-          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Valoraciones recibidas
-          </h2>
+        <div className="mt-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-serif text-xl font-semibold text-primary">Valoraciones</h2>
+            <span className="eyebrow">Recibidas</span>
+          </div>
           <ReviewsList userId={profile.id} />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-10">
           <button
             onClick={onLogout}
-            className="flex w-full items-center gap-3 rounded-xl border border-border/60 bg-card p-4 text-sm font-semibold text-destructive shadow-card transition-colors hover:bg-destructive/5"
+            className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/5"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/10">
               <LogOut size={18} />
@@ -226,15 +231,19 @@ function StatCard({
   tint: string;
 }) {
   return (
-    <div className="rounded-2xl bg-card p-4 shadow-card">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div
         className="flex h-9 w-9 items-center justify-center rounded-lg text-white"
         style={{ backgroundColor: tint }}
       >
-        <Icon size={18} strokeWidth={2.4} />
+        <Icon size={18} strokeWidth={2.2} />
       </div>
-      <div className="mt-3 text-xl font-bold text-primary-dark">{value}</div>
-      <div className="text-[11px] text-muted-foreground">{label}</div>
+      <div className="mt-4 font-serif text-3xl font-semibold leading-none text-primary">
+        {value}
+      </div>
+      <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-oak-soft">
+        {label}
+      </div>
     </div>
   );
 }

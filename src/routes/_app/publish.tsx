@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Camera, X, ImagePlus } from "lucide-react";
+import { X, ImagePlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { useAuth } from "@/hooks/useAuth";
@@ -91,14 +91,16 @@ function PublishPage() {
   };
 
   return (
-    <div className="px-5 pb-8 pt-6">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Nueva tarea</p>
-      <h1 className="mt-0.5 text-[28px] leading-tight">Publicar tarea</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Describe lo que necesitas y ponle un precio justo.
+    <div className="px-5 pb-8 pt-7">
+      <p className="eyebrow">Nueva tarea</p>
+      <h1 className="mt-1 font-serif text-[32px] font-semibold leading-tight text-primary">
+        Publicar tarea
+      </h1>
+      <p className="mt-2 max-w-md text-sm leading-relaxed text-oak-soft">
+        Cuenta con detalle qué necesitas y ponle un precio justo. Tu vecino estará encantado de ayudarte.
       </p>
 
-      <form onSubmit={onSubmit} className="mt-6 space-y-5">
+      <form onSubmit={onSubmit} className="mt-7 space-y-6">
         <Field label="Título" hint={`${title.length}/60`}>
           <input
             value={title}
@@ -106,7 +108,7 @@ function PublishPage() {
             maxLength={60}
             required
             placeholder="Ej. Pasear a mi perro 30 min"
-            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
+            className="w-full rounded-xl border border-input bg-paper-warm px-4 py-3.5 text-base outline-none transition-all focus:border-primary focus:bg-card"
           />
         </Field>
 
@@ -118,7 +120,7 @@ function PublishPage() {
             required
             rows={4}
             placeholder="Da más detalles para que un colaborador entienda la tarea"
-            className="w-full resize-none rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
+            className="w-full resize-none rounded-xl border border-input bg-paper-warm px-4 py-3.5 text-base outline-none transition-all focus:border-primary focus:bg-card"
           />
         </Field>
 
@@ -132,14 +134,14 @@ function PublishPage() {
                   key={c.value}
                   type="button"
                   onClick={() => setCategory(c.value)}
-                  className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-2 py-3.5 text-xs font-semibold transition-all ${
+                  className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-4 text-[11px] font-bold uppercase tracking-[0.12em] transition-all ${
                     active
-                      ? "border-transparent text-white shadow-sm"
-                      : "border-border bg-card text-foreground hover:border-primary/40"
+                      ? "border-primary bg-paper-warm text-primary shadow-sharp"
+                      : "border-border bg-card text-oak-soft hover:border-oak-soft/40 hover:text-primary"
                   }`}
-                  style={active ? { backgroundColor: c.colorVar } : undefined}
+                  style={active ? { color: c.colorVar, borderColor: c.colorVar } : undefined}
                 >
-                  <Icon size={20} strokeWidth={2.2} />
+                  <Icon size={20} strokeWidth={2} />
                   {c.label}
                 </button>
               );
@@ -147,7 +149,7 @@ function PublishPage() {
           </div>
         </Field>
 
-        <Field label="Precio (€)">
+        <Field label="Precio">
           <div className="relative">
             <input
               value={price}
@@ -155,11 +157,13 @@ function PublishPage() {
               required
               inputMode="decimal"
               placeholder="15"
-              className="w-full rounded-xl border border-input bg-card px-4 py-3 pr-10 text-base outline-none transition-colors focus:border-primary"
+              className="w-full rounded-xl border border-input bg-paper-warm px-4 py-3.5 pr-12 text-2xl font-serif font-semibold tabular-nums outline-none transition-all focus:border-primary focus:bg-card"
             />
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-serif text-2xl text-oak-soft">€</span>
           </div>
-          <p className="mt-1 text-[11px] text-muted-foreground">Mínimo 5 €. HelpApp retiene una comisión del 12%.</p>
+          <p className="mt-2 text-[11px] text-oak-soft">
+            Mínimo 5 €. HelpApp retiene una comisión del 12 % al completarse la tarea.
+          </p>
         </Field>
 
         <Field label="Ubicación (opcional)">
@@ -167,16 +171,16 @@ function PublishPage() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Ej. Calle Mayor, Madrid"
-            className="w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors focus:border-primary"
+            className="w-full rounded-xl border border-input bg-paper-warm px-4 py-3.5 text-base outline-none transition-all focus:border-primary focus:bg-card"
           />
-          <p className="mt-1 text-[11px] text-muted-foreground">
+          <p className="mt-2 text-[11px] text-oak-soft">
             Coordenadas detectadas: {coords.lat.toFixed(3)}, {coords.lng.toFixed(3)}
           </p>
         </Field>
 
         <Field label="Foto (opcional)">
           {imagePreview ? (
-            <div className="relative overflow-hidden rounded-xl">
+            <div className="relative overflow-hidden rounded-xl border border-border">
               <img src={imagePreview} alt="" className="aspect-video w-full object-cover" />
               <button
                 type="button"
@@ -184,27 +188,31 @@ function PublishPage() {
                   setImageFile(null);
                   setImagePreview(null);
                 }}
-                className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-xs font-semibold text-white backdrop-blur"
+                className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground backdrop-blur"
               >
                 <X size={12} /> Quitar
               </button>
             </div>
           ) : (
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card px-4 py-8 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
-              <ImagePlus size={28} strokeWidth={1.8} />
-              <span className="mt-2 font-medium">Toca para añadir foto</span>
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-paper-warm px-4 py-10 text-sm text-oak-soft transition-colors hover:border-oak-soft/60 hover:bg-card">
+              <ImagePlus size={28} strokeWidth={1.6} />
+              <span className="mt-2 font-serif text-base text-primary">Añadir una foto</span>
+              <span className="text-[11px] text-oak-soft">Toca para subir desde tu galería</span>
               <input type="file" accept="image/*" onChange={onPickImage} className="hidden" />
             </label>
           )}
         </Field>
 
-        {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+        {error && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
-          style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+          className="w-full rounded-xl bg-primary px-4 py-4 text-base font-semibold tracking-wide text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
         >
           {loading ? "Publicando..." : "Publicar tarea"}
         </button>
@@ -216,9 +224,9 @@ function PublishPage() {
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-1.5 flex items-center justify-between">
-        <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</label>
-        {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
+      <div className="mb-2 flex items-center justify-between">
+        <label className="eyebrow">{label}</label>
+        {hint && <span className="text-[10px] font-medium text-oak-soft">{hint}</span>}
       </div>
       {children}
     </div>

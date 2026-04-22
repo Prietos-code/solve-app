@@ -73,33 +73,36 @@ function FeedPage() {
 
   return (
     <div>
-      <header className="sticky top-0 z-30 border-b border-border/40 bg-background/85 backdrop-blur-xl safe-top">
-        <div className="px-5 pb-3 pt-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {firstName ? `Hola, ${firstName}` : "Bienvenido"}
-          </p>
-          <h1 className="mt-1 text-[28px] leading-[1.1] tracking-tight">
-            Tareas <span className="gradient-text">cerca de ti</span>
+      <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl safe-top">
+        <div className="px-5 pb-4 pt-7">
+          <p className="eyebrow">Próximo a ti</p>
+          <h1 className="mt-1 font-serif text-[34px] font-semibold leading-[1.05] tracking-tight text-primary">
+            {firstName ? `Buenos días,` : "Bienvenido,"}{" "}
+            <span className="italic text-oak-soft">{firstName || "vecino"}</span>
           </h1>
-          {isFallback && (
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-warning/30 bg-warning/10 px-2.5 py-1 text-[11px] font-medium text-warning-foreground">
-              <MapPin size={12} />
-              Madrid centro · activa la ubicación para tu zona
-            </div>
-          )}
-          <div className="relative mt-4">
-            <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+
+          <div className="mt-3 flex items-center gap-2 text-xs text-oak-soft">
+            <MapPin size={13} strokeWidth={2.2} />
+            <span className="font-medium">
+              {isFallback ? "Madrid · activa la ubicación" : "Tu ubicación"}
+            </span>
+            <span className="size-1 rounded-full bg-stone" />
+            <button className="underline underline-offset-4 decoration-stone">Cambiar</button>
+          </div>
+
+          <div className="relative mt-5">
+            <Search size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-oak-soft/60" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Busca paseos, recados, mudanzas..."
-              className="w-full rounded-2xl border border-input bg-card py-3 pl-11 pr-4 text-sm shadow-sharp outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
+              placeholder="¿En qué podemos ayudarte hoy?"
+              className="w-full rounded-xl border border-input bg-paper-warm py-3.5 pl-11 pr-4 text-sm text-primary placeholder:text-oak-soft/60 outline-none transition-all focus:border-primary focus:bg-card"
             />
           </div>
         </div>
-        <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 pb-3">
+        <div className="no-scrollbar flex gap-2.5 overflow-x-auto px-5 pb-4">
           <FilterChip active={category === null} onClick={() => setCategory(null)}>
-            Todas
+            Todos
           </FilterChip>
           {CATEGORIES.map((c) => {
             const Icon = c.icon;
@@ -108,9 +111,8 @@ function FeedPage() {
                 key={c.value}
                 active={category === c.value}
                 onClick={() => setCategory(c.value)}
-                color={c.colorVar}
               >
-                <Icon size={13} strokeWidth={2.5} />
+                <Icon size={12} strokeWidth={2.4} />
                 {c.label}
               </FilterChip>
             );
@@ -118,16 +120,27 @@ function FeedPage() {
         </div>
       </header>
 
-      <main className="space-y-3 px-5 pt-2">
-        {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+      <main className="space-y-4 px-5 pb-6 pt-5">
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-serif text-xl font-semibold text-primary">
+            Tareas recientes
+          </h2>
+          <span className="eyebrow">{filtered.length} cerca</span>
+        </div>
+
+        {error && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
         {loading && <FeedSkeleton />}
         {!loading && filtered.length === 0 && (
-          <div className="mt-16 text-center">
-            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-              <Inbox size={28} />
+          <div className="mt-12 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-paper-warm text-oak-soft">
+              <Inbox size={26} strokeWidth={1.8} />
             </div>
-            <p className="text-base font-semibold">No hay tareas en tu zona</p>
-            <p className="mt-1 text-sm text-muted-foreground">Sé el primero en publicar una.</p>
+            <p className="font-serif text-xl text-primary">No hay tareas en tu zona</p>
+            <p className="mt-1 text-sm text-oak-soft">Sé el primero en publicar una.</p>
           </div>
         )}
         {!loading && filtered.map((t) => <TaskCard key={t.id} task={t} />)}
@@ -140,22 +153,19 @@ function FilterChip({
   active,
   onClick,
   children,
-  color,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
-  color?: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all ${
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] transition-all ${
         active
-          ? "border-transparent text-white shadow-sm"
-          : "border-border bg-card text-foreground hover:border-primary/40"
+          ? "border-transparent bg-primary text-primary-foreground shadow-sharp"
+          : "border-border bg-paper-warm text-oak-soft hover:border-oak-soft/40 hover:text-primary"
       }`}
-      style={active && color ? { backgroundColor: color, borderColor: "transparent" } : undefined}
     >
       {children}
     </button>
@@ -166,10 +176,11 @@ function FeedSkeleton() {
   return (
     <>
       {[0, 1, 2].map((i) => (
-        <div key={i} className="animate-pulse rounded-2xl bg-card p-4 shadow-card">
-          <div className="h-3 w-20 rounded bg-muted" />
-          <div className="mt-3 h-4 w-3/4 rounded bg-muted" />
-          <div className="mt-2 h-4 w-1/2 rounded bg-muted" />
+        <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5">
+          <div className="h-3 w-20 rounded bg-paper-warm" />
+          <div className="mt-3 h-5 w-3/4 rounded bg-paper-warm" />
+          <div className="mt-2 h-4 w-1/2 rounded bg-paper-warm" />
+          <div className="mt-5 h-8 rounded bg-paper-warm" />
         </div>
       ))}
     </>
