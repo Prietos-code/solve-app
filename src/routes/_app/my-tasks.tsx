@@ -67,36 +67,42 @@ function MyTasksPage() {
   }, [user, tab]);
 
   return (
-    <div className="px-5 pb-8 pt-6">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Tu actividad</p>
-      <h1 className="mt-0.5 text-[28px] leading-tight">Mis tareas</h1>
+    <div className="px-5 pb-8 pt-7">
+      <p className="eyebrow">Tu actividad</p>
+      <h1 className="mt-1 font-serif text-[32px] font-semibold leading-tight text-primary">
+        Mis tareas
+      </h1>
 
-      <div className="mt-5 grid grid-cols-2 rounded-xl bg-card p-1 shadow-card">
+      <div className="mt-6 grid grid-cols-2 rounded-xl border border-border bg-paper-warm p-1">
         <TabBtn active={tab === "published"} onClick={() => setTab("published")}>
-          Mis publicaciones
+          Publicadas
         </TabBtn>
         <TabBtn active={tab === "accepted"} onClick={() => setTab("accepted")}>
           Aceptadas
         </TabBtn>
       </div>
 
-      <div className="mt-5 space-y-3">
-        {loading && <p className="text-sm text-muted-foreground">Cargando...</p>}
+      <div className="mt-6 space-y-3">
+        {loading && <p className="text-sm text-oak-soft">Cargando...</p>}
         {!loading && rows.length === 0 && (
           <div className="mt-12 text-center">
-            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-              <Inbox size={28} />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-paper-warm text-oak-soft">
+              <Inbox size={26} strokeWidth={1.8} />
             </div>
-            <p className="text-sm text-muted-foreground">
-              {tab === "published" ? "Aún no has publicado tareas." : "Aún no has aceptado ninguna tarea."}
+            <p className="font-serif text-xl text-primary">
+              {tab === "published" ? "Sin publicaciones" : "Sin tareas aceptadas"}
+            </p>
+            <p className="mt-1 text-sm text-oak-soft">
+              {tab === "published"
+                ? "Publica tu primera tarea y deja que el barrio te ayude."
+                : "Explora tareas cerca de ti y empieza a colaborar."}
             </p>
             {tab === "published" && (
               <Link
                 to="/publish"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elevated"
-                style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+                className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-elevated"
               >
-                <Plus size={16} strokeWidth={2.5} />
+                <Plus size={14} strokeWidth={2.5} />
                 Publicar primera tarea
               </Link>
             )}
@@ -108,14 +114,14 @@ function MyTasksPage() {
             return (
               <div
                 key={t.id}
-                className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
+                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 transition-all hover:border-oak-soft/40 hover:shadow-card"
               >
                 <Link to="/task/$id" params={{ id: t.id }} className="flex min-w-0 flex-1 items-center gap-3">
                   {t.image_url ? (
-                    <img src={t.image_url} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+                    <img src={t.image_url} alt="" className="h-16 w-16 shrink-0 rounded-xl border border-border object-cover" />
                   ) : (
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                      <ImageIcon size={22} />
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-border bg-paper-warm text-oak-soft">
+                      <ImageIcon size={22} strokeWidth={1.8} />
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
@@ -123,10 +129,14 @@ function MyTasksPage() {
                       <CategoryBadge category={t.category} />
                       <StatusBadge status={t.status} />
                     </div>
-                    <h3 className="mt-1 line-clamp-1 text-sm font-semibold">{t.title}</h3>
-                    <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                    <h3 className="mt-1 line-clamp-1 font-serif text-base font-semibold text-primary">
+                      {t.title}
+                    </h3>
+                    <div className="mt-0.5 flex items-center justify-between text-[11px] text-oak-soft">
                       <span>{timeAgo(t.created_at)}</span>
-                      <span className="font-bold text-primary">{formatPrice(t.price)}</span>
+                      <span className="font-serif text-base font-semibold tabular-nums text-primary">
+                        {formatPrice(t.price)}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -134,11 +144,10 @@ function MyTasksPage() {
                   <Link
                     to="/chat/$id"
                     params={{ id: t.id }}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary-foreground shadow-elevated"
-                    style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-elevated"
                     aria-label="Abrir chat"
                   >
-                    <MessageCircle size={18} />
+                    <MessageCircle size={17} />
                   </Link>
                 )}
               </div>
@@ -153,8 +162,8 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
   return (
     <button
       onClick={onClick}
-      className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-        active ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
+      className={`rounded-lg px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] transition-colors ${
+        active ? "bg-primary text-primary-foreground shadow-sharp" : "text-oak-soft hover:text-primary"
       }`}
     >
       {children}

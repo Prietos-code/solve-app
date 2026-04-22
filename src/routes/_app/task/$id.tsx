@@ -77,7 +77,7 @@ function TaskDetailPage() {
       .then(({ data }) => setHasRated(!!data));
   }, [user, task]);
 
-  if (loading) return <div className="p-6 text-sm text-muted-foreground">Cargando...</div>;
+  if (loading) return <div className="p-6 text-sm text-oak-soft">Cargando...</div>;
   if (error || !task) {
     return (
       <div className="p-6">
@@ -134,89 +134,92 @@ function TaskDetailPage() {
     <div className="pb-10">
       <div className="relative">
         {task.image_url ? (
-          <div className="aspect-[16/10] w-full bg-muted">
+          <div className="aspect-[16/10] w-full bg-paper-warm">
             <img src={task.image_url} alt={task.title} className="h-full w-full object-cover" />
           </div>
         ) : (
-          <div
-            className="flex aspect-[16/10] w-full items-center justify-center text-primary-foreground/80"
-            style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
-          >
-            <ImageIcon size={56} strokeWidth={1.4} />
+          <div className="flex aspect-[16/10] w-full items-center justify-center bg-primary text-primary-foreground/70">
+            <ImageIcon size={56} strokeWidth={1.2} />
           </div>
         )}
         <button
           onClick={() => navigate({ to: "/feed" })}
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-card/85 text-foreground shadow-card backdrop-blur"
+          className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/90 text-primary shadow-card backdrop-blur"
           aria-label="Volver"
         >
           <ArrowLeft size={18} />
         </button>
       </div>
 
-      <div className="px-5 pt-5">
+      <div className="px-5 pt-6">
         <div className="flex flex-wrap items-center gap-2">
           <CategoryBadge category={task.category} size="md" />
           <StatusBadge status={task.status} />
         </div>
 
-        <h1 className="mt-3 text-2xl">{task.title}</h1>
+        <h1 className="mt-4 font-serif text-[30px] font-semibold leading-tight text-primary">
+          {task.title}
+        </h1>
 
-        <div
-          className="mt-3 inline-flex items-center rounded-xl px-4 py-2 text-xl font-bold text-primary-foreground shadow-elevated"
-          style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
-        >
-          {formatPrice(task.price)}
+        <div className="mt-4 flex items-baseline gap-3 border-b border-border pb-5">
+          <span className="font-serif text-5xl font-semibold leading-none tabular-nums text-primary">
+            {formatPrice(task.price)}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-oak-soft">
+            por la tarea
+          </span>
         </div>
 
-        <p className="mt-5 whitespace-pre-line text-[15px] leading-relaxed text-foreground">
+        <p className="mt-5 whitespace-pre-line font-serif text-[17px] leading-relaxed text-foreground/85">
           {task.description}
         </p>
 
         <Link
           to="/profile"
-          className="mt-6 flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card transition-transform active:scale-[0.99]"
+          className="mt-7 flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:border-oak-soft/40 hover:shadow-card"
         >
-          <UserAvatar name={task.publisher.name} url={task.publisher.avatar_url} size={44} />
+          <UserAvatar name={task.publisher.name} url={task.publisher.avatar_url} size={48} />
           <div className="min-w-0 flex-1">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              Publicado por
-            </div>
-            <div className="font-semibold">{task.publisher.name}</div>
+            <div className="eyebrow">Publicado por</div>
+            <div className="font-serif text-lg font-semibold text-primary">{task.publisher.name}</div>
             <StarRating rating={task.publisher.rating} count={task.publisher.rating_count} />
           </div>
-          <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-oak-soft">
             <Clock size={12} />
             {timeAgo(task.created_at)}
           </div>
         </Link>
 
-        <div className="mt-5 overflow-hidden rounded-2xl shadow-card">
+        <div className="mt-5 overflow-hidden rounded-2xl border border-border">
           <iframe
             title="Ubicación"
             src={mapUrl}
-            className="h-44 w-full border-0"
+            className="h-44 w-full border-0 grayscale-[0.2]"
             loading="lazy"
           />
           {task.address && (
-            <div className="flex items-center gap-1.5 bg-card px-4 py-2.5 text-xs text-muted-foreground">
-              <MapPin size={13} className="text-primary" />
-              {task.address}
+            <div className="flex items-center gap-2 border-t border-border bg-card px-4 py-3 text-xs text-primary">
+              <MapPin size={13} className="text-oak-soft" />
+              <span className="font-medium">{task.address}</span>
             </div>
           )}
         </div>
 
-        {error && <div className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+        {error && (
+          <div className="mt-5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
 
-        <div className="mt-6 space-y-2">
+        <div className="mt-7 space-y-3">
           {(isPublisher || isCollaborator) &&
             (task.status === "ACCEPTED" || task.status === "IN_PROGRESS") && (
               <Link
                 to="/chat/$id"
                 params={{ id: task.id }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-card px-4 py-3.5 text-base font-semibold text-primary shadow-card transition-transform active:scale-[0.99]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-paper-warm"
               >
-                <MessageCircle size={18} />
+                <MessageCircle size={17} />
                 Abrir chat
               </Link>
             )}
@@ -225,8 +228,7 @@ function TaskDetailPage() {
             <button
               onClick={onAccept}
               disabled={acting}
-              className="w-full rounded-xl px-4 py-3.5 text-base font-semibold text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
-              style={{ background: "linear-gradient(135deg, var(--primary), var(--primary-dark))" }}
+              className="w-full rounded-xl bg-primary px-4 py-4 text-base font-semibold tracking-wide text-primary-foreground shadow-elevated transition-transform active:scale-[0.99] disabled:opacity-50"
             >
               {acting ? "Aceptando..." : `Aceptar tarea por ${formatPrice(task.price)}`}
             </button>
@@ -236,14 +238,14 @@ function TaskDetailPage() {
             <button
               onClick={onStart}
               disabled={acting}
-              className="w-full rounded-xl bg-warning px-4 py-3.5 text-base font-semibold text-warning-foreground shadow-elevated disabled:opacity-50"
+              className="w-full rounded-xl bg-warning px-4 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-warning-foreground shadow-elevated disabled:opacity-50"
             >
               Marcar como en curso
             </button>
           )}
 
           {isCollaborator && task.status === "IN_PROGRESS" && (
-            <div className="rounded-xl bg-card p-4 text-center text-sm text-muted-foreground shadow-card">
+            <div className="rounded-xl border border-border bg-paper-warm p-4 text-center text-sm italic text-oak-soft">
               Esperando confirmación del usuario para liberar el pago.
             </div>
           )}
@@ -252,7 +254,7 @@ function TaskDetailPage() {
             <button
               onClick={onComplete}
               disabled={acting}
-              className="w-full rounded-xl bg-success px-4 py-3.5 text-base font-semibold text-success-foreground shadow-elevated disabled:opacity-50"
+              className="w-full rounded-xl bg-success px-4 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-success-foreground shadow-elevated disabled:opacity-50"
             >
               Confirmar completada
             </button>
@@ -264,14 +266,14 @@ function TaskDetailPage() {
               <button
                 onClick={onCancel}
                 disabled={acting}
-                className="w-full rounded-xl border border-destructive bg-card px-4 py-3 text-sm font-semibold text-destructive disabled:opacity-50"
+                className="w-full rounded-xl border border-destructive/40 bg-card px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-destructive disabled:opacity-50"
               >
                 {isOpen ? "Eliminar tarea" : "Cancelar tarea"}
               </button>
             )}
 
           {task.status === "COMPLETED" && (
-            <div className="flex items-center justify-center gap-2 rounded-xl bg-success/10 p-4 text-sm font-semibold text-success">
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-success/30 bg-success/10 p-4 text-sm font-bold uppercase tracking-[0.14em] text-success">
               <CheckCircle2 size={18} />
               Tarea completada
             </div>
@@ -279,16 +281,16 @@ function TaskDetailPage() {
 
           {task.status === "COMPLETED" && (isPublisher || isCollaborator) && (
             hasRated ? (
-              <div className="flex items-center justify-center gap-2 rounded-xl bg-card p-3 text-xs text-muted-foreground shadow-card">
+              <div className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card p-3 text-xs italic text-oak-soft">
                 <Star size={14} className="fill-warning text-warning" />
                 Ya has valorado esta tarea
               </div>
             ) : (
               <button
                 onClick={() => setRateOpen(true)}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-warning px-4 py-3.5 text-base font-semibold text-warning-foreground shadow-elevated transition-transform active:scale-[0.99]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-warning px-4 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-warning-foreground shadow-elevated transition-transform active:scale-[0.99]"
               >
-                <Star size={18} />
+                <Star size={17} />
                 Valorar a {isPublisher ? "colaborador" : task.publisher.name.split(" ")[0]}
               </button>
             )
