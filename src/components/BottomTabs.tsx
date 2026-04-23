@@ -22,15 +22,13 @@ export function BottomTabs() {
               <Link
                 key={it.to}
                 to={it.to}
-                className="-mt-7 flex flex-col items-center"
+                className="relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-primary-foreground"
                 aria-label={it.label}
               >
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-elevated transition-transform active:scale-95">
-                  <it.Icon size={26} strokeWidth={2.2} />
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-elevated transition-transform active:scale-95">
+                  <it.Icon size={24} strokeWidth={2.2} />
                 </span>
-                <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-oak-soft">
-                  {it.label}
-                </span>
+                <span className="text-oak-soft">{it.label}</span>
               </Link>
             );
           }
