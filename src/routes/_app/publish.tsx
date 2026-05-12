@@ -162,7 +162,7 @@ function PublishPage() {
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-serif text-2xl text-oak-soft">€</span>
           </div>
           <p className="mt-2 text-[11px] text-oak-soft">
-            Mínimo 5 €. HelpApp retiene una comisión del 12 % al completarse la tarea.
+            Mínimo 5 €. SOLVE retiene una comisión del 12 % al completarse la tarea.
           </p>
         </Field>
 

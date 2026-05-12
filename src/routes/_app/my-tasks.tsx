@@ -9,12 +9,14 @@ import type { TaskStatus } from "@/lib/categories";
 import { Link } from "@tanstack/react-router";
 import { formatPrice, timeAgo } from "@/lib/format";
 import { CategoryBadge } from "@/components/CategoryBadge";
+import { ConversationCard } from "@/components/ConversationCard";
+import { fetchConversations, type ConversationPreview } from "@/lib/conversations";
 
 export const Route = createFileRoute("/_app/my-tasks")({
   component: MyTasksPage,
 });
 
-type Tab = "published" | "accepted";
+type Tab = "published" | "accepted" | "conversations";
 
 interface Row extends TaskCardData {
   status: TaskStatus;
@@ -25,6 +27,8 @@ function MyTasksPage() {
   const [tab, setTab] = useState<Tab>("published");
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [conversations, setConversations] = useState<ConversationPreview[]>([]);
+  const [loadingConversations, setLoadingConversations] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -66,6 +70,20 @@ function MyTasksPage() {
     };
   }, [user, tab]);
 
+  useEffect(() => {
+    if (tab !== "conversations" || !user) return;
+    let active = true;
+    setLoadingConversations(true);
+    fetchConversations(user.id).then((data) => {
+      if (!active) return;
+      setConversations(data);
+      setLoadingConversations(false);
+    });
+    return () => {
+      active = false;
+    };
+  }, [user, tab]);
+
   return (
     <div className="px-5 pb-8 pt-7">
       <p className="eyebrow">Tu actividad</p>
@@ -73,12 +91,15 @@ function MyTasksPage() {
         Mis tareas
       </h1>
 
-      <div className="mt-6 grid grid-cols-2 rounded-xl border border-border bg-paper-warm p-1">
+      <div className="mt-6 grid grid-cols-3 rounded-xl border border-border bg-paper-warm p-1">
         <TabBtn active={tab === "published"} onClick={() => setTab("published")}>
-          Publicadas
+          Como publicador
         </TabBtn>
         <TabBtn active={tab === "accepted"} onClick={() => setTab("accepted")}>
-          Aceptadas
+          Como colaborador
+        </TabBtn>
+        <TabBtn active={tab === "conversations"} onClick={() => setTab("conversations")}>
+          Chat
         </TabBtn>
       </div>
 
@@ -154,6 +175,27 @@ function MyTasksPage() {
             );
           })}
       </div>
+
+      {tab === "conversations" && (
+        <div className="mt-6 space-y-3">
+          {loadingConversations && <p className="text-sm text-oak-soft">Cargando...</p>}
+          {!loadingConversations && conversations.length === 0 && (
+            <div className="mt-12 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-paper-warm text-oak-soft">
+                <MessageCircle size={26} strokeWidth={1.8} />
+              </div>
+              <p className="font-serif text-xl text-primary">Sin conversaciones</p>
+              <p className="mt-1 text-sm text-oak-soft">
+                Cuando aceptes o publiques una tarea, aparecerá aquí el chat.
+              </p>
+            </div>
+          )}
+          {!loadingConversations &&
+            conversations.map((c) => (
+              <ConversationCard key={c.task.id} conversation={c} />
+            ))}
+        </div>
+      )}
     </div>
   );
 }

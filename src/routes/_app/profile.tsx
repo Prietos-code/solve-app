@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Pencil, CheckCircle2, Wallet, LogOut } from "lucide-react";
+import { Pencil, CheckCircle2, Wallet, LogOut, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { UserAvatar } from "@/components/UserAvatar";
@@ -107,9 +107,7 @@ function ProfilePage() {
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary-foreground/60">
             Tu perfil
           </p>
-          <div className="ornament-rule mx-auto mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] !text-primary-foreground/50">
-            HelpApp
-          </div>
+          <img src="/logo_sin_fondo.png" alt="SOLVE" className="mx-auto h-4 w-auto" />
         </div>
       </div>
 
@@ -204,6 +202,15 @@ function ProfilePage() {
         </div>
 
         <div className="mt-10">
+          <Link
+            to="/settings"
+            className="mb-3 flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+              <Settings size={18} />
+            </span>
+            Ajustes
+          </Link>
           <button
             onClick={onLogout}
             className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/5"

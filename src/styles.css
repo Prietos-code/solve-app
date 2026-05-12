@@ -52,9 +52,10 @@
   --color-cat-hogar: var(--cat-hogar);
   --color-cat-otros: var(--cat-otros);
 
-  --shadow-card: 0 1px 2px oklch(0.30 0.04 60 / 0.04), 0 4px 16px -6px oklch(0.30 0.04 60 / 0.08);
-  --shadow-elevated: 0 12px 32px -14px oklch(0.30 0.05 60 / 0.22), 0 4px 12px -6px oklch(0.30 0.05 60 / 0.10);
+  --shadow-card: 0 2px 8px oklch(0.25 0.03 55 / 0.08), 0 8px 24px oklch(0.25 0.03 55 / 0.06);
+  --shadow-elevated: 0 16px 48px oklch(0.25 0.04 55 / 0.14), 0 4px 12px oklch(0.25 0.03 55 / 0.08);
   --shadow-sharp: 0 1px 0 oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.05);
+  --shadow-nav: 0 -4px 24px oklch(0.25 0.03 55 / 0.08);
 
   --font-sans: "Public Sans", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-serif: "Crimson Pro", "Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif;
@@ -64,53 +65,52 @@
 :root {
   --radius: 1rem;
 
-  /* Oak & Parchment palette */
-  /* Surfaces — warm paper */
-  --background: oklch(0.985 0.008 75);          /* #FDFCF9 paper-base */
-  --paper-warm: oklch(0.962 0.012 75);          /* #F7F3EE warm paper */
-  --surface: oklch(1 0 0);                       /* pure white card */
-  --foreground: oklch(0.18 0.01 60);             /* #1C1917 ink */
+  /* Surfaces — warm paper, lighter & cleaner */
+  --background: oklch(0.99 0.005 75);
+  --paper-warm: oklch(0.96 0.010 75);
+  --surface: oklch(1 0 0);
+  --foreground: oklch(0.16 0.01 60);
 
-  /* Brand — deep oak */
-  --primary: oklch(0.32 0.04 55);                /* #4A3728 oak-deep */
-  --primary-foreground: oklch(0.985 0.008 75);
-  --primary-dark: oklch(0.24 0.035 55);          /* darker oak */
-  --oak-soft: oklch(0.55 0.025 55);              /* #8C7A6B oak-soft */
+  /* Brand — deep blue, cooler and more saturated */
+  --primary: oklch(0.35 0.045 230);
+  --primary-foreground: oklch(0.99 0.005 75);
+  --primary-dark: oklch(0.26 0.038 230);
+  --oak-soft: oklch(0.52 0.022 230);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.01 60);
+  --card-foreground: oklch(0.16 0.01 60);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.01 60);
+  --popover-foreground: oklch(0.16 0.01 60);
 
-  --secondary: oklch(0.962 0.012 75);            /* paper-warm */
-  --secondary-foreground: oklch(0.32 0.04 55);
+  --secondary: oklch(0.96 0.010 75);
+  --secondary-foreground: oklch(0.35 0.045 230);
 
-  --muted: oklch(0.962 0.012 75);
-  --muted-foreground: oklch(0.55 0.025 55);      /* oak-soft */
+  --muted: oklch(0.96 0.010 75);
+  --muted-foreground: oklch(0.52 0.022 50);
 
-  --accent: oklch(0.94 0.018 70);
-  --accent-foreground: oklch(0.32 0.04 55);
+  --accent: oklch(0.94 0.016 230);
+  --accent-foreground: oklch(0.35 0.045 230);
 
-  --destructive: oklch(0.50 0.16 28);            /* burnt sienna */
-  --destructive-foreground: oklch(0.985 0.008 75);
+  --destructive: oklch(0.50 0.16 28);
+  --destructive-foreground: oklch(0.99 0.005 75);
 
-  --success: oklch(0.55 0.10 145);               /* moss */
-  --success-foreground: oklch(0.985 0.008 75);
+  --success: oklch(0.52 0.10 148);
+  --success-foreground: oklch(0.99 0.005 75);
 
-  --warning: oklch(0.68 0.13 60);                /* amber/honey */
-  --warning-foreground: oklch(0.20 0.02 60);
+  --warning: oklch(0.70 0.13 62);
+  --warning-foreground: oklch(0.18 0.02 60);
 
-  --border: oklch(0.90 0.012 70);                /* stone */
-  --input: oklch(0.92 0.012 70);
-  --ring: oklch(0.55 0.025 55);
+  --border: oklch(0.88 0.008 70);
+  --input: oklch(0.90 0.010 70);
+  --ring: oklch(0.52 0.022 230);
 
   /* Categorías — paleta natural y armónica */
-  --cat-recados: oklch(0.58 0.13 35);            /* terracota */
-  --cat-mascotas: oklch(0.68 0.13 60);           /* honey */
-  --cat-mudanzas: oklch(0.45 0.07 230);          /* slate blue */
-  --cat-clases: oklch(0.55 0.10 145);            /* moss */
-  --cat-hogar: oklch(0.50 0.09 15);              /* clay rose */
-  --cat-otros: oklch(0.55 0.025 55);             /* oak-soft */
+  --cat-recados: oklch(0.58 0.13 35);
+  --cat-mascotas: oklch(0.70 0.12 60);
+  --cat-mudanzas: oklch(0.45 0.07 230);
+  --cat-clases: oklch(0.52 0.10 148);
+  --cat-hogar: oklch(0.50 0.09 15);
+  --cat-otros: oklch(0.52 0.022 50);
 }
 
 .dark {
@@ -118,23 +118,23 @@
   --paper-warm: oklch(0.20 0.014 60);
   --surface: oklch(0.22 0.015 60);
   --foreground: oklch(0.97 0.005 75);
-  --card: oklch(0.22 0.015 60);
+  --card: oklch(0.20 0.014 60);
   --card-foreground: oklch(0.97 0.005 75);
-  --popover: oklch(0.22 0.015 60);
+  --popover: oklch(0.20 0.014 60);
   --popover-foreground: oklch(0.97 0.005 75);
-  --primary: oklch(0.85 0.04 70);
+  --primary: oklch(0.80 0.04 230);
   --primary-foreground: oklch(0.18 0.01 60);
-  --primary-dark: oklch(0.95 0.02 75);
-  --oak-soft: oklch(0.70 0.02 60);
+  --primary-dark: oklch(0.90 0.025 250);
+  --oak-soft: oklch(0.65 0.02 230);
   --secondary: oklch(0.26 0.018 60);
   --secondary-foreground: oklch(0.97 0.005 75);
   --muted: oklch(0.26 0.018 60);
-  --muted-foreground: oklch(0.70 0.02 60);
+  --muted-foreground: oklch(0.65 0.02 55);
   --accent: oklch(0.30 0.02 60);
   --accent-foreground: oklch(0.97 0.005 75);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.70 0.02 60);
+  --ring: oklch(0.65 0.02 55);
 }
 
 @layer base {
@@ -159,33 +159,21 @@
     font-family: var(--font-serif);
     color: var(--color-primary);
     font-weight: 600;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.01em;
   }
-  h1 { letter-spacing: -0.018em; }
+  h1 { letter-spacing: -0.015em; }
 
-  /* Subtle paper texture on the body background */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.35;
-    background-image:
-      radial-gradient(oklch(0.55 0.025 55 / 0.06) 1px, transparent 1px),
-      radial-gradient(oklch(0.55 0.025 55 / 0.04) 1px, transparent 1px);
-    background-size: 22px 22px, 36px 36px;
-    background-position: 0 0, 11px 11px;
+  html {
+    scroll-behavior: smooth;
   }
-  body > * { position: relative; z-index: 1; }
 }
 
 @layer utilities {
   .safe-bottom {
-    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+    padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
   }
   .safe-top {
-    padding-top: max(env(safe-area-inset-top), 0.5rem);
+    padding-top: max(env(safe-area-inset-top), 0.75rem);
   }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
@@ -199,7 +187,7 @@
     font-weight: 600;
     font-size: 0.6875rem;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     color: var(--color-oak-soft);
   }
 
@@ -230,6 +218,38 @@
     content: "";
     width: 1.75rem;
     height: 1px;
-    background-color: var(--color-border);
+    background-color: var(--border);
+  }
+
+  .glass-card {
+    background: oklch(0.98 0.005 75 / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.88 0.008 70 / 0.6);
+  }
+
+  /* Smooth button transitions */
+  button, .btn {
+    transition: transform 180ms ease-out, box-shadow 180ms ease-out, background-color 150ms ease, border-color 150ms ease;
+  }
+  button:not(:disabled):hover, .btn:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+  button:not(:disabled):active, .btn:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  /* 3D logo spin on click */
+  .logo-spin-3d {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    perspective: 800px;
+  }
+  .logo-spin-3d.spinning {
+    animation: logo-3d-spin 2s ease-in-out forwards;
+  }
+  @keyframes logo-3d-spin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
   }
 }

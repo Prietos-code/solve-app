@@ -13,8 +13,8 @@ const items: TabItem[] = [
 export function BottomTabs() {
   const location = useLocation();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl safe-bottom">
-      <div className="mx-auto flex max-w-xl items-stretch justify-around px-3 pt-1.5">
+    <nav className="fixed inset-x-0 bottom-0 z-40 bg-white shadow-[-4px_0_24px_rgba(0,0,0,0.08)] safe-bottom">
+      <div className="mx-auto flex max-w-xl items-stretch justify-around px-4 pt-1">
         {items.map((it) => {
           const active = location.pathname.startsWith(it.to);
           if (it.primary) {
@@ -22,15 +22,12 @@ export function BottomTabs() {
               <Link
                 key={it.to}
                 to={it.to}
-                className="relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3 text-[10px] font-bold uppercase tracking-[0.14em]"
+                className="relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3"
                 aria-label={it.label}
               >
-                <span className="flex h-11 items-center justify-center">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-elevated transition-transform active:scale-95">
-                    <it.Icon size={24} strokeWidth={2.2} />
-                  </span>
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgba(30,50,80,0.3)] transition-transform active:scale-95">
+                  <it.Icon size={26} strokeWidth={2.2} />
                 </span>
-                <span className="text-oak-soft">{it.label}</span>
               </Link>
             );
           }
@@ -38,7 +35,7 @@ export function BottomTabs() {
             <Link
               key={it.to}
               to={it.to}
-              className={`relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors ${
+              className={`relative flex min-w-[64px] flex-col items-center gap-1 px-2 pb-2 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] transition-colors ${
                 active ? "text-primary" : "text-oak-soft hover:text-primary"
               }`}
             >
@@ -48,7 +45,7 @@ export function BottomTabs() {
                   className="absolute top-0 h-0.5 w-8 rounded-full bg-primary"
                 />
               )}
-              <span className="flex h-11 items-center justify-center">
+              <span className="flex h-10 w-10 items-center justify-center">
                 <it.Icon size={22} strokeWidth={active ? 2.4 : 2} />
               </span>
               <span>{it.label}</span>

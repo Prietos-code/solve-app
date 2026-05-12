@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/hooks/useAuth";
+import { TranslationProvider } from "@/lib/translations";
 
 import appCss from "../styles.css?url";
 
@@ -31,9 +32,9 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#1A56DB" },
-      { title: "HelpApp — Ayuda entre vecinos" },
+      { title: "SOLVE — Ayuda entre vecinos" },
       { name: "description", content: "Publica tareas o ayuda a tus vecinos: paseos, recados, mudanzas y más." },
-      { property: "og:title", content: "HelpApp" },
+      { property: "og:title", content: "SOLVE" },
       { property: "og:description", content: "Marketplace de microservicios entre particulares en España." },
       { property: "og:type", content: "website" },
     ],
@@ -60,8 +61,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <AuthProvider>
-      <Outlet />
-    </AuthProvider>
+    <TranslationProvider>
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
+    </TranslationProvider>
   );
 }

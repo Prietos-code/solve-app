@@ -1,16 +1,19 @@
+import { useEffect, useRef } from "react";
+
 interface Props {
   size?: number;
   className?: string;
   tone?: "light" | "dark";
+  spin?: boolean;
 }
 
 /**
- * HelpApp brand mark — a serif "H" inscribed inside a hand-drawn oak ring,
- * evoking a wax-stamped seal on parchment.
+ * SOLVE brand mark — a bold "S" inside a geometric circle.
+ * The S represents solutions, services, and the community helping each other.
  */
-export function Logo({ size = 40, className, tone = "light" }: Props) {
-  const stroke = tone === "light" ? "#FDFCF9" : "#4A3728";
+export function Logo({ size = 40, className, tone = "light", spin = false }: Props) {
   const fill = tone === "light" ? "#FDFCF9" : "#4A3728";
+
   return (
     <svg
       width={size}
@@ -18,32 +21,27 @@ export function Logo({ size = 40, className, tone = "light" }: Props) {
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`${className ?? ""} ${spin ? "logo-spin" : ""}`}
       aria-hidden="true"
     >
-      {/* outer oak ring with subtle imperfection */}
-      <path
-        d="M20 4.4c8.6 0 15.6 7 15.6 15.6S28.6 35.6 20 35.6 4.4 28.6 4.4 20 11.4 4.4 20 4.4Z"
-        stroke={stroke}
-        strokeOpacity="0.55"
-        strokeWidth="1.1"
+      {/* Outer circle */}
+      <circle
+        cx="20"
+        cy="20"
+        r="17"
+        stroke={fill}
+        strokeWidth="1.5"
+        strokeOpacity="0.6"
       />
+
+      {/* SOLVE "S" lettermark */}
       <path
-        d="M20 6.8c7.3 0 13.2 5.9 13.2 13.2"
-        stroke={stroke}
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      {/* serif H monogram */}
-      <path
-        d="M13.5 12.5h2.6v6.1h7.8v-6.1h2.6v15h-2.6v-6.6h-7.8v6.6h-2.6v-15Z"
+        d="M25.5 14.5C25.5 13.5 24.5 13 23 13C21.5 13 20.5 13.5 20.5 14.5C20.5 15.5 21.5 16 23 16C23.5 16 24 16 24.5 16.2V17.5C24 17.7 23.3 18 22 18C20.5 18 19.2 17.4 19.2 16C19.2 14.6 20.2 14 21.2 14C21.7 14 22.1 14.2 22.3 14.4L22.7 14L24 12H19.5L19 13C18.5 12 18 11.5 17 11.5C15.5 11.5 14.5 12.5 14.5 14C14.5 15.5 15.2 16 16.2 16.8C17.2 17.6 17.2 18 17.2 18.5C17.2 19.5 16.2 20 15 20C13.5 20 12.5 19.5 12.5 18.5H11.5C11.5 20 12.8 21 15 21C17 21 18.2 20.2 18.2 19V18C18.5 17.7 19.8 17.5 21.2 17.5C23.5 17.5 25.5 16.5 25.5 14.5Z"
         fill={fill}
       />
-      {/* serif feet */}
-      <rect x="11.4" y="11.6" width="6.8" height="0.9" fill={fill} />
-      <rect x="11.4" y="27.5" width="6.8" height="0.9" fill={fill} />
-      <rect x="21.8" y="11.6" width="6.8" height="0.9" fill={fill} />
-      <rect x="21.8" y="27.5" width="6.8" height="0.9" fill={fill} />
+
+      {/* Accent dot */}
+      <circle cx="26" cy="14" r="1.5" fill={fill} />
     </svg>
   );
 }

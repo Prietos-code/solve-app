@@ -13,10 +13,13 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppPublishRouteImport } from './routes/_app/publish'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppMyTasksRouteImport } from './routes/_app/my-tasks'
+import { Route as AppMessagesRouteImport } from './routes/_app/messages'
 import { Route as AppFeedRouteImport } from './routes/_app/feed'
+import { Route as AppUserIdRouteImport } from './routes/_app/user.$id'
 import { Route as AppTaskIdRouteImport } from './routes/_app/task/$id'
 import { Route as AppChatIdRouteImport } from './routes/_app/chat.$id'
 
@@ -39,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPublishRoute = AppPublishRouteImport.update({
   id: '/publish',
   path: '/publish',
@@ -54,9 +62,19 @@ const AppMyTasksRoute = AppMyTasksRouteImport.update({
   path: '/my-tasks',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMessagesRoute = AppMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFeedRoute = AppFeedRouteImport.update({
   id: '/feed',
   path: '/feed',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUserIdRoute = AppUserIdRouteImport.update({
+  id: '/user/$id',
+  path: '/user/$id',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTaskIdRoute = AppTaskIdRouteImport.update({
@@ -75,22 +93,28 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/feed': typeof AppFeedRoute
+  '/messages': typeof AppMessagesRoute
   '/my-tasks': typeof AppMyTasksRoute
   '/profile': typeof AppProfileRoute
   '/publish': typeof AppPublishRoute
+  '/settings': typeof AppSettingsRoute
   '/chat/$id': typeof AppChatIdRoute
   '/task/$id': typeof AppTaskIdRoute
+  '/user/$id': typeof AppUserIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/feed': typeof AppFeedRoute
+  '/messages': typeof AppMessagesRoute
   '/my-tasks': typeof AppMyTasksRoute
   '/profile': typeof AppProfileRoute
   '/publish': typeof AppPublishRoute
+  '/settings': typeof AppSettingsRoute
   '/chat/$id': typeof AppChatIdRoute
   '/task/$id': typeof AppTaskIdRoute
+  '/user/$id': typeof AppUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -99,11 +123,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_app/feed': typeof AppFeedRoute
+  '/_app/messages': typeof AppMessagesRoute
   '/_app/my-tasks': typeof AppMyTasksRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/publish': typeof AppPublishRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/chat/$id': typeof AppChatIdRoute
   '/_app/task/$id': typeof AppTaskIdRoute
+  '/_app/user/$id': typeof AppUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -112,22 +139,28 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/feed'
+    | '/messages'
     | '/my-tasks'
     | '/profile'
     | '/publish'
+    | '/settings'
     | '/chat/$id'
     | '/task/$id'
+    | '/user/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/register'
     | '/feed'
+    | '/messages'
     | '/my-tasks'
     | '/profile'
     | '/publish'
+    | '/settings'
     | '/chat/$id'
     | '/task/$id'
+    | '/user/$id'
   id:
     | '__root__'
     | '/'
@@ -135,11 +168,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/_app/feed'
+    | '/_app/messages'
     | '/_app/my-tasks'
     | '/_app/profile'
     | '/_app/publish'
+    | '/_app/settings'
     | '/_app/chat/$id'
     | '/_app/task/$id'
+    | '/_app/user/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/publish': {
       id: '/_app/publish'
       path: '/publish'
@@ -200,11 +243,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMyTasksRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/messages': {
+      id: '/_app/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AppMessagesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/feed': {
       id: '/_app/feed'
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof AppFeedRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/user/$id': {
+      id: '/_app/user/$id'
+      path: '/user/$id'
+      fullPath: '/user/$id'
+      preLoaderRoute: typeof AppUserIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/task/$id': {
@@ -226,20 +283,26 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppFeedRoute: typeof AppFeedRoute
+  AppMessagesRoute: typeof AppMessagesRoute
   AppMyTasksRoute: typeof AppMyTasksRoute
   AppProfileRoute: typeof AppProfileRoute
   AppPublishRoute: typeof AppPublishRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppChatIdRoute: typeof AppChatIdRoute
   AppTaskIdRoute: typeof AppTaskIdRoute
+  AppUserIdRoute: typeof AppUserIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppFeedRoute: AppFeedRoute,
+  AppMessagesRoute: AppMessagesRoute,
   AppMyTasksRoute: AppMyTasksRoute,
   AppProfileRoute: AppProfileRoute,
   AppPublishRoute: AppPublishRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppChatIdRoute: AppChatIdRoute,
   AppTaskIdRoute: AppTaskIdRoute,
+  AppUserIdRoute: AppUserIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

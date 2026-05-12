@@ -28,7 +28,7 @@ function RegisterPage() {
     }
     setLoading(true);
     const redirectUrl = `${window.location.origin}/feed`;
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -40,6 +40,26 @@ function RegisterPage() {
     if (error) {
       setError(error.message);
       return;
+    }
+    if (data.user) {
+      const { data: existingProfile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", data.user.id)
+        .single();
+      
+      if (!existingProfile) {
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: data.user.id,
+          name: name.trim(),
+          email: email,
+          rating_avg: 0,
+          rating_count: 0,
+        });
+        if (profileError) {
+          console.error("Error creating profile:", profileError);
+        }
+      }
     }
     navigate({ to: "/feed" });
   };

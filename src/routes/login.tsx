@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
+import "./login.css";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -18,11 +19,29 @@ function LoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       setError(error.message === "Invalid login credentials" ? "Email o contraseña incorrectos." : error.message);
       return;
+    }
+    if (data.user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", data.user.id)
+        .single();
+      
+      if (!profile) {
+        const name = data.user.user_metadata?.name || email.split("@")[0];
+        await supabase.from("profiles").insert({
+          id: data.user.id,
+          name: name,
+          email: email,
+          rating: 0,
+          rating_count: 0,
+        });
+      }
     }
     navigate({ to: "/feed" });
   };
@@ -31,13 +50,10 @@ function LoginPage() {
     <div className="relative flex min-h-screen flex-col bg-background px-6 py-10">
       <div className="relative mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
         <div className="mb-10 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary">
-            <Logo size={42} tone="light" />
-          </div>
-          <p className="eyebrow mb-2">Marketplace de barrio</p>
-          <h1 className="font-serif text-4xl font-semibold leading-tight">HelpApp</h1>
+                    <p className="eyebrow mb-2">Marketplace de barrio</p>
+          <img src="/logo_sin_fondo.png" alt="SOLVE" className="mx-auto h-16 w-auto" />
           <div className="ornament-rule mx-auto mt-4 text-[10px] font-semibold uppercase tracking-[0.2em]">
-            Bienvenido
+            Por nosotros
           </div>
         </div>
 

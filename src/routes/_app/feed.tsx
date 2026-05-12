@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, MapPin, Inbox } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TaskCard, type TaskCardData } from "@/components/TaskCard";
 import { CATEGORIES, type Category } from "@/lib/categories";
@@ -51,6 +51,7 @@ function FeedPage() {
               price: Number(t.price),
               category: t.category,
               image_url: t.image_url,
+              publisher_id: t.publisher_id,
               publisher_name: t.publisher_name,
               publisher_avatar: t.publisher_avatar,
               created_at: t.created_at,
@@ -73,116 +74,94 @@ function FeedPage() {
 
   return (
     <div>
-      <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl safe-top">
-        <div className="px-5 pb-4 pt-7">
-          <p className="eyebrow">Próximo a ti</p>
-          <h1 className="mt-1 font-serif text-[34px] font-semibold leading-[1.05] tracking-tight text-primary">
-            {firstName ? `Buenos días,` : "Bienvenido,"}{" "}
-            <span className="italic text-oak-soft">{firstName || "vecino"}</span>
-          </h1>
+      {/* Category filters - horizontal scroll */}
+      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-6">
+        <button
+          onClick={() => setCategory(null)}
+          className={`shrink-0 rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+            category === null
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "border border-border bg-card text-oak-soft hover:border-primary/40 hover:text-primary"
+          }`}
+        >
+          Todos
+        </button>
+        {CATEGORIES.map((c) => {
+          const Icon = c.icon;
+          return (
+            <button
+              key={c.value}
+              onClick={() => setCategory(c.value)}
+              className={`shrink-0 flex items-center gap-1.5 rounded-full border px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+                category === c.value
+                  ? "border-transparent text-primary-foreground shadow-sm"
+                  : "border-border bg-card text-oak-soft hover:border-primary/40 hover:text-primary"
+              }`}
+              style={category === c.value ? { backgroundColor: c.colorVar } : undefined}
+            >
+              <Icon size={11} strokeWidth={2.4} />
+              {c.label}
+            </button>
+          );
+        })}
+      </div>
 
-          <div className="mt-3 flex items-center gap-2 text-xs text-oak-soft">
-            <MapPin size={13} strokeWidth={2.2} />
-            <span className="font-medium">
-              {isFallback ? "Madrid · activa la ubicación" : "Tu ubicación"}
-            </span>
-            <span className="size-1 rounded-full bg-stone" />
-            <button className="underline underline-offset-4 decoration-stone">Cambiar</button>
-          </div>
-
-          <div className="relative mt-5">
-            <Search size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-oak-soft/60" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="¿En qué podemos ayudarte hoy?"
-              className="w-full rounded-xl border border-input bg-paper-warm py-3.5 pl-11 pr-4 text-sm text-primary placeholder:text-oak-soft/60 outline-none transition-all focus:border-primary focus:bg-card"
-            />
-          </div>
-        </div>
-        <div className="no-scrollbar flex gap-2.5 overflow-x-auto px-5 pb-4">
-          <FilterChip active={category === null} onClick={() => setCategory(null)}>
-            Todos
-          </FilterChip>
-          {CATEGORIES.map((c) => {
-            const Icon = c.icon;
-            return (
-              <FilterChip
-                key={c.value}
-                active={category === c.value}
-                onClick={() => setCategory(c.value)}
-              >
-                <Icon size={12} strokeWidth={2.4} />
-                {c.label}
-              </FilterChip>
-            );
-          })}
-        </div>
-      </header>
-
-      <main className="space-y-4 px-5 pb-6 pt-5">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-xl font-semibold text-primary">
-            Tareas recientes
-          </h2>
-          <span className="eyebrow">{filtered.length} cerca</span>
-        </div>
-
-        {error && (
-          <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
+      {/* Results header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-serif text-2xl font-semibold text-primary">
+          {filtered.length} tareas disponibles
+        </h2>
+        {isFallback && (
+          <div className="flex items-center gap-1.5 text-xs text-oak-soft/70">
+            <MapPin size={12} strokeWidth={2.2} />
+            <span className="font-medium">Madrid · </span>
+            <button className="font-medium text-primary/70 underline underline-offset-2">Cambiar ubicación</button>
           </div>
         )}
-        {loading && <FeedSkeleton />}
-        {!loading && filtered.length === 0 && (
-          <div className="mt-12 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-paper-warm text-oak-soft">
-              <Inbox size={26} strokeWidth={1.8} />
+      </div>
+
+      {error && (
+        <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <div className="grid grid-cols-4 gap-6">
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <div key={i} className="animate-pulse overflow-hidden rounded-2xl bg-card shadow-md">
+              <div className="aspect-[4/3] bg-paper-warm" />
+              <div className="p-4">
+                <div className="h-3 w-16 rounded-full bg-paper-warm" />
+                <div className="mt-3 h-5 w-3/4 rounded bg-paper-warm" />
+                <div className="mt-2 h-4 w-1/2 rounded bg-paper-warm" />
+                <div className="mt-4 flex items-center justify-between border-t border-paper-warm pt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-paper-warm" />
+                    <div className="h-3 w-16 rounded bg-paper-warm" />
+                  </div>
+                  <div className="h-7 w-16 rounded-full bg-paper-warm" />
+                </div>
+              </div>
             </div>
-            <p className="font-serif text-xl text-primary">No hay tareas en tu zona</p>
-            <p className="mt-1 text-sm text-oak-soft">Sé el primero en publicar una.</p>
-          </div>
-        )}
-        {!loading && filtered.map((t) => <TaskCard key={t.id} task={t} />)}
-      </main>
-    </div>
-  );
-}
-
-function FilterChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] transition-all ${
-        active
-          ? "border-transparent bg-primary text-primary-foreground shadow-sharp"
-          : "border-border bg-paper-warm text-oak-soft hover:border-oak-soft/40 hover:text-primary"
-      }`}
-    >
-      {children}
-    </button>
-  );
-}
-
-function FeedSkeleton() {
-  return (
-    <>
-      {[0, 1, 2].map((i) => (
-        <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5">
-          <div className="h-3 w-20 rounded bg-paper-warm" />
-          <div className="mt-3 h-5 w-3/4 rounded bg-paper-warm" />
-          <div className="mt-2 h-4 w-1/2 rounded bg-paper-warm" />
-          <div className="mt-5 h-8 rounded bg-paper-warm" />
+          ))}
         </div>
-      ))}
-    </>
+      )}
+
+      {!loading && filtered.length === 0 && (
+        <div className="py-16 text-center">
+          <p className="font-serif text-2xl text-primary">No hay tareas en tu zona</p>
+          <p className="mt-2 text-sm text-oak-soft">Sé el primero en publicar una.</p>
+        </div>
+      )}
+
+      {!loading && filtered.length > 0 && (
+        <div className="grid grid-cols-4 gap-6">
+          {filtered.map((t) => (
+            <TaskCard key={t.id} task={t} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
